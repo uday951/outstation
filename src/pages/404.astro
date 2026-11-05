@@ -1,0 +1,22 @@
+---
+import Base from '../layouts/Base.astro';
+import ContactActions from '../components/ContactActions.astro';
+---
+<Base title="Page Not Found | Best Ambulance Service" description="This page could not be found. Call Best Ambulance Service or use the links below to find what you need." noindex>
+  <section class="page-hero">
+    <div class="wrap">
+      <p class="eyebrow">Error 404</p>
+      <h1 class="h1-page" style="margin-top:var(--s-3)">This page is not here.</h1>
+      <p class="lead">If you need an ambulance, do not keep searching. Call us.</p>
+      <ContactActions />
+      <h2 style="font-size:var(--t-h3);margin-top:var(--s-7);margin-bottom:var(--s-4)">Or try one of these</h2>
+      <ul class="tag-list">
+        <li><a href="/">Home</a></li>
+        <li><a href="/services/outstation-ambulance">Outstation ambulance</a></li>
+        <li><a href="/services">All services</a></li>
+        <li><a href="/locations">Locations</a></li>
+        <li><a href="/contact">Contact</a></li>
+      </ul>
+    </div>
+  </section>
+</Base>

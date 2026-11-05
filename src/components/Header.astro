@@ -1,0 +1,95 @@
+---
+import { business, telHref } from '../data/business';
+import Icon from './Icon.astro';
+import Logo from './Logo.astro';
+import { routesByKm, routeHref } from '../data/routes';
+
+const path = Astro.url.pathname.replace(/\.html$/, '');
+const current = (href: string) => (path === href ? 'page' : undefined);
+const topRoutes = routesByKm.filter((r) => ['Bangalore', 'Chennai', 'Vijayawada', 'Visakhapatnam', 'Mumbai', 'Delhi'].includes(r.city));
+const services = [
+  ['ICU Ambulance', '/services/icu-ambulance'],
+  ['Ventilator Ambulance', '/services/ventilator-ambulance'],
+  ['Oxygen Ambulance', '/services/oxygen-ambulance'],
+  ['Hospital Transfer', '/services/hospital-transfer'],
+  ['Patient Transport', '/services/patient-transport'],
+  ['Freezer Box Service', '/services/dead-body-freezer-box'],
+];
+---
+<aside class="alert-bar on-dark" aria-label="Emergency contact">
+  <div class="wrap">
+    <span>Medical emergency? Do not use a form.</span>
+    <a href={telHref}>Call {business.phoneDisplay}, 24×7</a>
+  </div>
+</aside>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/" aria-label={`${business.name}, home`}><Logo />{business.shortName}</a>
+
+    <nav class="nav" aria-label="Main">
+      <ul>
+        <li>
+          <details class="nav-menu">
+            <summary>Outstation routes</summary>
+            <div class="menu">
+              <a class="menu-title" href="/services/outstation-ambulance">All outstation transfers from Hyderabad</a>
+              {topRoutes.map((r) => <a href={routeHref(r)}>Hyderabad to {r.city}</a>)}
+            </div>
+          </details>
+        </li>
+        <li>
+          <details class="nav-menu">
+            <summary>Services</summary>
+            <div class="menu">
+              <a class="menu-title" href="/services">All ambulance services</a>
+              {services.map(([n, h]) => <a href={h}>{n}</a>)}
+            </div>
+          </details>
+        </li>
+        <li><a href="/locations" aria-current={current('/locations')}>Locations</a></li>
+        <li><a href="/fleet" aria-current={current('/fleet')}>Fleet</a></li>
+        <li><a href="/blog" aria-current={current('/blog')}>Guides</a></li>
+        <li><a href="/about" aria-current={current('/about')}>About</a></li>
+        <li><a href="/contact" aria-current={current('/contact')}>Contact</a></li>
+      </ul>
+    </nav>
+
+    <div class="header-cta">
+      <a class="btn btn--ghost btn--small" href="/book">Plan a transfer</a>
+      <a class="btn btn--call btn--small" href={telHref}><Icon name="phone" />{business.phoneDisplay}</a>
+      <details class="mobile-nav">
+        <summary class="menu-btn">Menu</summary>
+        <nav class="panel" aria-label="Mobile">
+          <ul>
+            <li><a href="/services/outstation-ambulance">Outstation ambulance</a></li>
+            <li><a href="/services">All services</a></li>
+            <li><a href="/locations">Locations</a></li>
+            <li><a href="/fleet">Fleet</a></li>
+            <li><a href="/blog">Guides</a></li>
+            <li><a href="/faq">FAQ</a></li>
+            <li><a href="/about">About</a></li>
+            <li><a href="/contact">Contact</a></li>
+          </ul>
+          <div class="sub">
+            <span>Popular routes from Hyderabad</span>
+            <ul>{topRoutes.map((r) => <li><a href={routeHref(r)}>To {r.city}</a></li>)}</ul>
+          </div>
+        </nav>
+      </details>
+    </div>
+  </div>
+</header>
+<script>
+  // Close open menus on outside click or Escape; only one desktop menu open at a time.
+  const menus = document.querySelectorAll<HTMLDetailsElement>('.nav-menu, .mobile-nav');
+  document.addEventListener('click', (e) => {
+    menus.forEach((m) => { if (m.open && !m.contains(e.target as Node)) m.open = false; });
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape') return;
+    menus.forEach((m) => { if (m.open) { m.open = false; m.querySelector('summary')?.focus(); } });
+  });
+  menus.forEach((m) => m.addEventListener('toggle', () => {
+    if (m.open) menus.forEach((o) => { if (o !== m) o.open = false; });
+  }));
+</script>

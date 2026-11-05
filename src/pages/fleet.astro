@@ -1,0 +1,57 @@
+---
+import Base from '../layouts/Base.astro';
+import Crumbs from '../components/Crumbs.astro';
+import ContactActions from '../components/ContactActions.astro';
+import Photo from '../components/Photo.astro';
+import FinalCta from '../components/FinalCta.astro';
+const crumbs = [{ name: 'Home', href: '/' }, { name: 'Fleet', href: '/fleet' }];
+const fleet = [
+  { name: 'Basic Life Support (BLS) ambulance', text: 'First aid, oxygen support and a stretcher, for stable patient transport and non-critical situations.', href: '/services/bls-ambulance' },
+  { name: 'Advanced Life Support (ALS) / ICU ambulance', text: 'Ventilator, cardiac monitor and infusion support, staffed by paramedics trained in critical care, for unstable or intensive-care patients.', href: '/services/icu-ambulance' },
+  { name: 'Cardiac ambulance', text: 'Defibrillator-equipped and ready for monitoring, for suspected cardiac events and transport after a procedure.', href: '/services/cardiac-ambulance' },
+  { name: 'Patient transport vehicle', text: 'Wheelchair-accessible transport for discharges and outpatient appointments.', href: '/services/patient-transport' },
+  { name: 'Freezer box vehicle', text: 'Temperature-controlled, dignified transport for the deceased, available 24×7 across Hyderabad.', href: '/services/dead-body-freezer-box' },
+];
+---
+<Base title="Ambulance Fleet in Hyderabad: Photos of ICU, ALS & BLS Vehicles" description="See the real vehicles: BLS, ALS and ICU ambulances, patient transport and freezer box vehicles, and how they are checked before each shift." crumbs={crumbs}>
+  <Crumbs items={crumbs} />
+  <section class="page-hero">
+    <div class="wrap">
+      <h1 class="h1-page">The fleet, matched to the patient</h1>
+      <p class="lead">Send the vehicle and equipment that fits the patient’s need, not whatever is closest. These are the business’s own vehicles.</p>
+      <ContactActions plan />
+    </div>
+  </section>
+
+  <section class="section--tight section--line">
+    <div class="wrap gallery">
+      <Photo name="street" alt="Three ambulances on a Hyderabad street, the lead vehicle marked Emergency" caption="On the road in Hyderabad" sizes="(min-width: 720px) 50vw, 100vw" />
+      <Photo name="dropoff" alt="Mobile ICU ambulance and a second ambulance outside a hospital building" caption="Mobile ICU outside a hospital" sizes="(min-width: 720px) 50vw, 100vw" />
+      <Photo name="pair" alt="Advanced Life Support ambulance with a smaller ambulance under a shed" caption="Advanced Life Support and a smaller ambulance" sizes="(min-width: 720px) 50vw, 100vw" />
+      <Photo name="lineup" alt="Two ambulances outside the office" caption="At the office" sizes="(min-width: 720px) 50vw, 100vw" />
+      <Photo name="interiorNight" alt="Inside a mobile ICU ambulance, with stretcher, cabinets and attendant seating" caption="Inside a mobile ICU" sizes="(min-width: 720px) 50vw, 100vw" />
+      <Photo name="interiorDay" alt="Inside a smaller ambulance with a padded stretcher and monitor" caption="Inside a smaller ambulance" sizes="(min-width: 720px) 50vw, 100vw" />
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="t-h">
+    <div class="wrap">
+      <div class="section-head"><h2 id="t-h">Vehicle types</h2></div>
+      <div class="rows">
+        {fleet.map((f) => <a class="row-link" href={f.href}><h3>{f.name}</h3><p>{f.text}</p><span class="go" aria-hidden="true">View service</span></a>)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--sand" aria-labelledby="m-h">
+    <div class="wrap split">
+      <h2 id="m-h">Maintained every day</h2>
+      <div class="prose">
+        <p>Vehicles are checked and equipped before each shift. Oxygen levels, monitoring equipment and vehicle condition are part of the standard routine.</p>
+        <p><a href="/safety-standards">Read more about our safety routine</a>.</p>
+      </div>
+    </div>
+  </section>
+
+  <FinalCta />
+</Base>

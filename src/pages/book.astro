@@ -1,0 +1,39 @@
+---
+import Base from '../layouts/Base.astro';
+import Crumbs from '../components/Crumbs.astro';
+import BookingForm from '../components/BookingForm.astro';
+import { business, telHref, waHref } from '../data/business';
+const crumbs = [{ name: 'Home', href: '/' }, { name: 'Plan a Transfer', href: '/book' }];
+const wa = 'Hello, I need an outstation ambulance.\nPickup area:\nDestination:\nDate:\nPatient condition:';
+---
+<Base title="Request a Long-Distance Ambulance Transfer | Best Ambulance Service" description="Send your pickup, destination, date and patient details. A coordinator calls back to confirm the vehicle, crew, route and cost. For emergencies, call instead." crumbs={crumbs} waMessage={wa}>
+  <Crumbs items={crumbs} />
+  <section class="page-hero" style="padding-bottom:var(--s-6)">
+    <div class="wrap">
+      <h1 class="h1-page">Plan a patient transfer</h1>
+      <p class="lead">Takes about two minutes. A coordinator will call you back to confirm what is possible and what it costs.</p>
+    </div>
+  </section>
+  <section style="padding-bottom:var(--section)">
+    <div class="wrap split split--aside">
+      <div>
+        <h2 class="sr-only">Transfer request form</h2>
+        <BookingForm id="book-request" />
+      </div>
+      <aside class="sticky-side">
+        <h2 style="font-size:var(--t-h3);font-stretch:100%;font-weight:650;letter-spacing:-0.005em;line-height:1.2">Quicker ways to reach us</h2>
+        <p style="margin-top:var(--s-3)">Phone: <a class="link" href={telHref}><strong>{business.phoneDisplay}</strong></a></p>
+        <p style="margin-top:var(--s-2)"><a class="link" href={waHref(wa)} rel="noopener">Message us on WhatsApp</a></p>
+        <h2 style="font-size:var(--t-h3);font-stretch:100%;font-weight:650;letter-spacing:-0.005em;line-height:1.2;margin-top:var(--s-6)">What happens next</h2>
+        <ol class="ticks" style="margin-top:var(--s-3)">
+          <li>Your request reaches our team, with a reference number.</li>
+          <li>A coordinator calls to go over the patient’s needs.</li>
+          <li>You hear the vehicle, crew, route and cost.</li>
+          <li>The trip is booked once you agree.</li>
+        </ol>
+        <p style="margin-top:var(--s-5)"><a class="link" href="/blog/information-needed-before-booking-an-ambulance">What information to have ready</a></p>
+        <p style="margin-top:var(--s-2)"><a class="link" href="/pay">Already confirmed? Pay an advance</a></p>
+      </aside>
+    </div>
+  </section>
+</Base>

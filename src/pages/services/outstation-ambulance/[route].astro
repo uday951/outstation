@@ -1,0 +1,108 @@
+---
+import Base from '../../../layouts/Base.astro';
+import Crumbs from '../../../components/Crumbs.astro';
+import ContactActions from '../../../components/ContactActions.astro';
+import RouteLadder from '../../../components/RouteLadder.astro';
+import Faq from '../../../components/Faq.astro';
+import FinalCta from '../../../components/FinalCta.astro';
+import { service } from '../../../lib/schema';
+import { routes, routesByKm, routeHref, routeWhatsApp, type Route } from '../../../data/routes';
+
+export function getStaticPaths() {
+  return routes.map((r) => ({ params: { route: r.slug }, props: { r } }));
+}
+const { r } = Astro.props as { r: Route };
+const site = (Astro.site?.href ?? '').replace(/\/$/, '');
+const crumbs = [
+  { name: 'Home', href: '/' },
+  { name: 'Services', href: '/services' },
+  { name: 'Outstation Ambulance', href: '/services/outstation-ambulance' },
+  { name: `Hyderabad to ${r.city}`, href: routeHref(r) },
+];
+const url = `${site}${routeHref(r)}`;
+const wa = routeWhatsApp(r);
+const near = routesByKm.filter((x) => x.slug !== r.slug).sort((a, b) => Math.abs(a.km - r.km) - Math.abs(b.km - r.km)).slice(0, 3).sort((a, b) => a.km - b.km);
+const finalStop = r.stops[r.stops.length - 1].km;
+const planHref = `/book?to=${encodeURIComponent(r.city)}`;
+---
+<Base
+  title={r.title}
+  description={r.description}
+  crumbs={crumbs}
+  waMessage={wa}
+  schema={[service(site, url, `Hyderabad to ${r.city} Ambulance`, r.description, 'Long-distance patient transport', [{ '@type': 'City', name: 'Hyderabad' }, { '@type': 'City', name: r.city }])]}
+>
+  <Crumbs items={crumbs} />
+  <section class="page-hero">
+    <div class="wrap">
+      <p class="eyebrow">Outstation route</p>
+      <h1 class="h1-page" style="margin-top:var(--s-3)">Hyderabad to {r.city} ambulance</h1>
+      <p class="lead">{r.lead}</p>
+      <ContactActions plan planHref={planHref} waMessage={wa} />
+    </div>
+  </section>
+
+  <section class="section--tight section--line" aria-labelledby="line-h">
+    <div class="wrap">
+      <h2 id="line-h" class="sr-only">The route at a glance</h2>
+      <dl class="facts">
+        <div><dt>Distance</dt><dd class="num">{r.kmLabel}</dd></div>
+        <div><dt>Typical journey</dt><dd class="num">{r.hours}</dd></div>
+        <div><dt>Main road</dt><dd class="text">{r.via}</dd></div>
+        <div><dt>States on the way</dt><dd class="text">{r.states}</dd></div>
+      </dl>
+
+      <div class="strip" role="img" aria-label={`Route line from Hyderabad to ${r.city}, showing towns along the way at their distance from Hyderabad.`}>
+        <div class="strip-ends"><span>Hyderabad</span><span>{r.city}</span></div>
+        <div class="strip-line">
+          <span class="strip-stop" style="--x:0%"></span>
+          {r.stops.map((s, idx) => <span class:list={['strip-stop', { 'strip-stop--end': idx === r.stops.length - 1 }]} style={`--x:${((s.km / finalStop) * 100).toFixed(1)}%`}></span>)}
+        </div>
+      </div>
+      <ul class="strip-list" style="list-style:none;padding:0">
+        {r.stops.map((s) => <li><span>{s.name}</span><span class="num muted">{s.km.toLocaleString('en-IN')} km</span></li>)}
+      </ul>
+      <p class="small muted" style="margin-top:var(--s-4)">Distances along the way are approximate, from road-routing data. The crew confirms the route on the day. Journey times vary with traffic, stops and the patient’s condition.</p>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="about-h">
+    <div class="wrap split split--aside">
+      <div>
+        <h2 id="about-h">About this route</h2>
+        <div class="prose" style="margin-top:var(--s-5)">
+          {r.body.map((p) => <p>{p}</p>)}
+          <h3>Planning notes</h3>
+          <ul class="ticks">{r.planning.map((p) => <li>{p}</li>)}</ul>
+        </div>
+      </div>
+      <aside class="sticky-side">
+        <h3>Vehicle options for this trip</h3>
+        <ul class="ticks" style="margin-top:var(--s-4)">
+          <li><a class="link" href="/services/bls-ambulance">BLS</a> for stable patients</li>
+          <li><a class="link" href="/services/oxygen-ambulance">Oxygen ambulance</a>, with supply planned for {r.hours}</li>
+          <li><a class="link" href="/services/als-ambulance">ALS</a> if a paramedic may need to intervene</li>
+          <li><a class="link" href="/services/icu-ambulance">ICU</a> or <a class="link" href="/services/ventilator-ambulance">ventilator</a> for critical patients</li>
+        </ul>
+        <p class="small muted" style="margin-top:var(--s-4)">The treating doctor advises on fitness to travel and level of care. The coordinator confirms the vehicle and cost before the trip is booked.</p>
+      </aside>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="q-h">
+    <div class="wrap split">
+      <h2 id="q-h">Questions about the {r.city} route</h2>
+      <Faq items={r.faqs} />
+    </div>
+  </section>
+
+  <section class="section section--line" aria-labelledby="o-h">
+    <div class="wrap">
+      <div class="section-head"><h2 id="o-h">Routes of a similar length</h2></div>
+      <RouteLadder items={near} />
+      <p style="margin-top:var(--s-5)"><a class="link" href="/services/outstation-ambulance">All outstation routes</a> · <a class="link" href="/blog/how-to-book-an-outstation-ambulance">How to book an outstation ambulance</a></p>
+    </div>
+  </section>
+
+  <FinalCta waMessage={wa} planHref={planHref} title={`Moving a patient to ${r.city}? Talk to a coordinator.`} />
+</Base>

@@ -1,0 +1,15 @@
+# Render Blueprint. Secrets and settings that change are set in the Render dashboard,
+# not here. See "Deploy on Render" in README.md.
+services:
+  - type: web
+    name: best-ambulance
+    runtime: node
+    region: singapore # closest Render region to India; cannot be changed after creation
+    plan: 0.5c-512mb # always on. The free plan sleeps after 15 minutes, which is unsafe for this site
+    buildCommand: npm ci --omit=dev && npm run build
+    startCommand: npm start
+    healthCheckPath: /
+    autoDeployTrigger: commit
+    envVars:
+      - key: HOST
+        value: 0.0.0.0

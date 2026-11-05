@@ -1,0 +1,90 @@
+---
+import Base from '../../layouts/Base.astro';
+import Crumbs from '../../components/Crumbs.astro';
+import ContactActions from '../../components/ContactActions.astro';
+import Faq from '../../components/Faq.astro';
+import Photo from '../../components/Photo.astro';
+import FinalCta from '../../components/FinalCta.astro';
+import { service } from '../../lib/schema';
+import { services, serviceHref, serviceName, type Service } from '../../data/services';
+
+export function getStaticPaths() {
+  return services.map((s) => ({ params: { slug: s.slug }, props: { s } }));
+}
+const { s } = Astro.props as { s: Service };
+const site = (Astro.site?.href ?? '').replace(/\/$/, '');
+const crumbs = [{ name: 'Home', href: '/' }, { name: 'Services', href: '/services' }, { name: s.name, href: serviceHref(s.slug) }];
+const url = `${site}${serviceHref(s.slug)}`;
+const wa = `Hello, I would like to ask about the ${s.name} service.\nPickup area:\nDestination:\nDate:`;
+const planHref = s.bookType ? `/book?type=${encodeURIComponent(s.bookType)}` : '/book';
+---
+<Base
+  title={s.title}
+  description={s.description}
+  crumbs={crumbs}
+  waMessage={wa}
+  schema={[service(site, url, s.name, s.description, s.name, [{ '@type': 'City', name: 'Hyderabad' }, { '@type': 'City', name: 'Secunderabad' }])]}
+>
+  <Crumbs items={crumbs} />
+  <section class="page-hero">
+    <div class:list={['wrap', { 'hero-grid': s.photo }]}>
+      <div>
+        <p class="eyebrow">{s.group}</p>
+        <h1 class="h1-page" style="margin-top:var(--s-3)">{s.name}</h1>
+        <p class="lead">{s.lead}</p>
+        <ContactActions plan={!s.emergency} planHref={planHref} waMessage={wa} />
+      </div>
+      {s.photo && <Photo name={s.photo} alt={s.photoAlt ?? ''} eager sizes="(min-width: 1040px) 40vw, 100vw" />}
+    </div>
+  </section>
+
+  <section class="section section--line" aria-labelledby="ab-h">
+    <div class="wrap split split--aside">
+      <div class="prose">
+        <h2 id="ab-h" style="margin-top:0">What this service is</h2>
+        {s.body.map((p) => <p>{p}</p>)}
+      </div>
+      <div class="sticky-side">
+        <h3>{s.whenLabel}</h3>
+        <ul class="ticks" style="margin-top:var(--s-4)">{s.when.map((w) => <li>{w}</li>)}</ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--sand" aria-labelledby="crew-h">
+    <div class="wrap grid-2">
+      {s.equipment && (
+        <div>
+          <h2 id="eq-h" style="font-size:clamp(1.75rem,1.4rem + 1.3vw,2.5rem);margin-bottom:var(--s-5)">{s.equipmentLabel}</h2>
+          <ul class="ticks">{s.equipment.map((e) => <li>{e}</li>)}</ul>
+          <p class="small muted" style="margin-top:var(--s-4)">Confirmed for each trip by the coordinator.</p>
+        </div>
+      )}
+      <div>
+        <h2 id="crew-h" style="font-size:clamp(1.75rem,1.4rem + 1.3vw,2.5rem);margin-bottom:var(--s-5)">{s.crewLabel}</h2>
+        <p>{s.crew}</p>
+        <h3 style="margin-top:var(--s-6);margin-bottom:var(--s-3)">{s.longDistanceLabel ?? 'On a long-distance trip'}</h3>
+        <p>{s.longDistance}</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="q-h">
+    <div class="wrap split">
+      <h2 id="q-h">Questions about this service</h2>
+      <Faq items={s.faqs} />
+    </div>
+  </section>
+
+  <section class="section--tight section--line" aria-labelledby="rel-h">
+    <div class="wrap">
+      <h2 id="rel-h" style="font-size:var(--t-h3);margin-bottom:var(--s-4)">Related services</h2>
+      <ul class="tag-list">
+        {s.related.map((r) => <li><a href={serviceHref(r)}>{serviceName(r)}</a></li>)}
+        <li><a href="/services">All services</a></li>
+      </ul>
+    </div>
+  </section>
+
+  <FinalCta waMessage={wa} planHref={planHref} />
+</Base>

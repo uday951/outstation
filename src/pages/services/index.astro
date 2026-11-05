@@ -1,0 +1,59 @@
+---
+import Base from '../../layouts/Base.astro';
+import Crumbs from '../../components/Crumbs.astro';
+import ContactActions from '../../components/ContactActions.astro';
+import CompareTable from '../../components/CompareTable.astro';
+import FinalCta from '../../components/FinalCta.astro';
+import { services, groups, serviceHref } from '../../data/services';
+
+const crumbs = [{ name: 'Home', href: '/' }, { name: 'Services', href: '/services' }];
+---
+<Base title="All Ambulance Services in Hyderabad | Best Ambulance Service" description="ICU, ventilator, oxygen, ALS and BLS ambulances, hospital transfers, rail and air coordination, freezer box and standby. Compare services and find the right one." crumbs={crumbs}>
+  <Crumbs items={crumbs} />
+  <section class="page-hero">
+    <div class="wrap">
+      <h1 class="h1-page">All ambulance services</h1>
+      <p class="lead">From a long-distance ICU transfer to a planned dialysis trip. If you are not sure which you need, call and describe the situation.</p>
+      <ContactActions plan />
+    </div>
+  </section>
+
+  <section class="section--tight section--line">
+    <div class="wrap">
+      <a class="row-link" href="/services/outstation-ambulance" style="padding-block:0;grid-template-columns:1fr">
+        <h2>Outstation Ambulance</h2>
+        <p>Intercity and interstate patient transfers from Hyderabad, with route pages for frequently requested destinations.</p>
+        <span class="go">View outstation routes</span>
+      </a>
+    </div>
+  </section>
+
+  {groups.map((g, i) => {
+    const items = services.filter((s) => s.group === g);
+    return (
+      <section class:list={['section--tight', i % 2 === 0 ? 'section--sand' : '']} aria-labelledby={`g${i}`}>
+        <div class="wrap">
+          <h2 id={`g${i}`} style="font-size:clamp(1.75rem,1.4rem + 1.3vw,2.5rem);margin-bottom:var(--s-5)">{g}</h2>
+          <div class="rows">
+            {items.map((s) => (
+              <a class="row-link" href={serviceHref(s.slug)}>
+                <h3>{s.name}</h3>
+                <p>{s.short}</p>
+                <span class="go" aria-hidden="true">View service</span>
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+  })}
+
+  <section class="section" aria-labelledby="compare-h">
+    <div class="wrap">
+      <div class="section-head"><h2 id="compare-h">BLS, oxygen, ALS or ICU, side by side</h2></div>
+      <CompareTable />
+    </div>
+  </section>
+
+  <FinalCta />
+</Base>

@@ -1,0 +1,191 @@
+---
+import Base from '../layouts/Base.astro';
+import { Picture } from 'astro:assets';
+import ContactActions from '../components/ContactActions.astro';
+import RouteLadder from '../components/RouteLadder.astro';
+import BookingForm from '../components/BookingForm.astro';
+import CompareTable from '../components/CompareTable.astro';
+import Faq from '../components/Faq.astro';
+import Photo from '../components/Photo.astro';
+import FinalCta from '../components/FinalCta.astro';
+import heroImg from '../assets/photos/three-ambulances-street.webp';
+import { telHref, business } from '../data/business';
+import { locationPages, locationHref, allAreas } from '../data/locations';
+import { faqGroups } from '../data/faqs';
+
+const homeFaqs = [faqGroups[0].items[0], faqGroups[1].items[0], faqGroups[2].items[1], faqGroups[2].items[2], faqGroups[2].items[4]];
+const waMsg = 'Hello, I need an outstation ambulance from Hyderabad.';
+
+const decide = [
+  { q: 'Someone is seriously unwell right now', a: `Call ${business.phoneDisplay} now`, href: telHref },
+  { q: 'Stable, going home to another city after treatment', a: 'BLS ambulance', href: '/services/bls-ambulance' },
+  { q: 'Breathes alone, but needs oxygen on the way', a: 'Oxygen ambulance', href: '/services/oxygen-ambulance' },
+  { q: 'Could need a paramedic to step in during the trip', a: 'ALS ambulance', href: '/services/als-ambulance' },
+  { q: 'In an ICU, or on a ventilator', a: 'ICU or ventilator ambulance', href: '/services/icu-ambulance' },
+  { q: 'A newborn moving between hospitals', a: 'Neonatal ambulance', href: '/services/neonatal-ambulance' },
+  { q: 'Can sit up and fly or take a train with help', a: 'Medical escort', href: '/services/medical-escort' },
+  { q: 'A family member has passed away', a: 'Freezer box transport', href: '/services/dead-body-freezer-box' },
+];
+
+const servicesOverview = [
+  { name: 'ICU and ventilator transfers', text: 'Intensive care on the road, within Hyderabad or to another city.', href: '/services/icu-ambulance' },
+  { name: 'Hospital-to-hospital transfers', text: 'For a higher level of care, a specialist or a second opinion.', href: '/services/hospital-transfer' },
+  { name: 'Planned patient transport', text: 'Discharges, dialysis, appointments and senior citizens.', href: '/services/patient-transport' },
+  { name: 'Rail, air and escort', text: 'Station and airport transfers, air ambulance ground legs and medical escorts.', href: '/services/medical-escort' },
+  { name: 'Emergency response in Hyderabad', text: 'Accidents, chest pain and breathing emergencies. Call, do not type.', href: '/services/emergency-ambulance' },
+  { name: 'Freezer box and mortuary', text: 'Dignified transport and storage, including journeys to a native place.', href: '/services/dead-body-freezer-box' },
+];
+---
+<Base
+  title="Outstation Ambulance Service from Hyderabad | ICU & Oxygen Transfers"
+  description="Long-distance ambulance transfers from Hyderabad to Bengaluru, Chennai, Vijayawada and beyond. ICU, ventilator and oxygen ambulances, arranged by phone 24×7."
+  waMessage={waMsg}
+>
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <p class="eyebrow">Best Ambulance Service, Hyderabad</p>
+        <h1 style="margin-top:var(--s-4)">Outstation ambulance from Hyderabad, planned for <em>the whole distance.</em></h1>
+        <p class="lead">ICU, ventilator, oxygen and basic ambulances for long-distance patient transfers. Vehicle, crew, route and cost are confirmed with you before the trip is booked.</p>
+        <ContactActions plan planHref="#request" waMessage={waMsg} />
+      </div>
+      <figure class="hero-photo">
+        <Picture src={heroImg} formats={['avif', 'webp']} fallbackFormat="jpg" widths={[480, 800, 1200]} sizes="(min-width: 1040px) 40vw, 100vw" alt="Three white Best Ambulance Service vehicles, including a large Force Traveller ambulance, parked on a Hyderabad street" loading="eager" fetchpriority="high" />
+      </figure>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="routes-h">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 id="routes-h">How far is the patient going?</h2>
+        <p class="lead">Frequently requested routes from Hyderabad. Other destinations in India are confirmed case by case.</p>
+      </div>
+      <RouteLadder />
+      <p class="small muted" style="margin-top:var(--s-4)">Distances and times are planning estimates. They vary with traffic, stops and the patient’s condition.</p>
+    </div>
+  </section>
+
+  <section class="section section--ink on-dark" aria-labelledby="decide-h">
+    <div class="wrap split">
+      <div class="section-head" style="margin-bottom:0">
+        <h2 id="decide-h">Which ambulance does the patient need?</h2>
+        <p class="lead">Start with what is true right now. The treating doctor and our coordinator will confirm the final choice with you.</p>
+      </div>
+      <nav class="decide" aria-labelledby="decide-h">
+        {decide.map((d) => <a href={d.href}><span class="q">{d.q}</span><span class="a">{d.a}</span></a>)}
+      </nav>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="compare-h">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 id="compare-h">BLS, oxygen, ALS or ICU, side by side</h2>
+      </div>
+      <CompareTable />
+      <p style="margin-top:var(--s-5)"><a class="link" href="/blog/choosing-the-right-ambulance-for-long-distance">How to choose the right ambulance for a long-distance transfer</a></p>
+    </div>
+  </section>
+
+  <section class="section section--sand" aria-labelledby="process-h">
+    <div class="wrap">
+      <div class="section-head"><h2 id="process-h">How a long-distance transfer is arranged</h2></div>
+      <ol class="steps steps--4">
+        <li><h3>Tell us the trip</h3><p>Call, WhatsApp or send the form with the pickup, the destination and the patient’s condition.</p></li>
+        <li><h3>Confirm the plan</h3><p>A coordinator confirms the vehicle, crew, route, journey time and cost with you before dispatch.</p></li>
+        <li><h3>On the road</h3><p>The crew stays with the patient, with rest stops planned around their needs on longer journeys.</p></li>
+        <li><h3>Handover</h3><p>The patient is handed to the receiving hospital or settled at home, with a status update.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="section" id="request" aria-labelledby="request-h">
+    <div class="wrap split">
+      <div class="sticky-side">
+        <h2 id="request-h">Planning a transfer? Send us the details.</h2>
+        <p class="lead" style="margin-top:var(--s-4)">A coordinator will call you back to confirm what is possible and what it costs. Sending this form is a request and does not book the trip.</p>
+      </div>
+      <BookingForm id="home-request" />
+    </div>
+  </section>
+
+  <section class="section section--line" aria-labelledby="services-h">
+    <div class="wrap">
+      <div class="section-head"><h2 id="services-h">More than the highway</h2></div>
+      <div class="rows">
+        {servicesOverview.map((s) => (
+          <a class="row-link" href={s.href}>
+            <h3>{s.name}</h3>
+            <p>{s.text}</p>
+            <span class="go" aria-hidden="true">View service</span>
+          </a>
+        ))}
+      </div>
+      <p style="margin-top:var(--s-5)"><a class="link" href="/services">See all ambulance services</a></p>
+    </div>
+  </section>
+
+  <section class="section section--sand" aria-labelledby="why-h">
+    <div class="wrap split split--even">
+      <div>
+        <h2 id="why-h">What you can expect from us</h2>
+        <ul class="ticks" style="margin-top:var(--s-6)">
+          <li><strong>A person answers.</strong> A coordinator takes your call directly, at any hour, with no automated menu.</li>
+          <li><strong>The vehicle fits the patient.</strong> The ambulance and equipment are matched to the case, not just whatever is closest.</li>
+          <li><strong>The plan is clear before you commit.</strong> You hear the vehicle, crew, route and cost first.</li>
+          <li><strong>Long trips are planned as long trips.</strong> Rest stops and crew changes are arranged around the distance.</li>
+          <li><strong>Vehicles are checked and cleaned.</strong> Oxygen and equipment are checked before each shift, and vehicles are cleaned between patients.</li>
+        </ul>
+        <p style="margin-top:var(--s-5)"><a class="link" href="/safety-standards">How our safety routine works</a></p>
+      </div>
+      <Photo name="dropoff" alt="Mobile ICU ambulance and a second ambulance parked outside a multi-storey hospital building in Hyderabad" />
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="equip-h">
+    <div class="wrap split split--even">
+      <Photo name="interiorNight" alt="Inside a mobile ICU ambulance: stretcher, attendant seating, equipment cabinets and blue flooring" class="photo tall" sizes="(min-width: 1040px) 40vw, 100vw" />
+      <div>
+        <h2 id="equip-h">Equipment and patient care</h2>
+        <p class="lead" style="margin-top:var(--s-4)">Each ambulance carries what its role requires. Tell the coordinator what the doctor has advised, and they will confirm what is on board for your trip.</p>
+        <ul class="ticks" style="margin-top:var(--s-6)">
+          <li>Oxygen cylinders with masks, and backup supply</li>
+          <li>Cardiac monitor and defibrillator on ALS and ICU units</li>
+          <li>Portable ventilator with battery backup</li>
+          <li>Infusion and syringe pumps for ICU-level transfers</li>
+          <li>Suction unit for airway management</li>
+          <li>Spinal board and immobilisation equipment</li>
+          <li>Stretcher and mobility support</li>
+          <li>Infant transport incubator for neonatal transfers</li>
+        </ul>
+        <p style="margin-top:var(--s-5)"><a class="link" href="/fleet">See the fleet</a></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--sand" aria-labelledby="coverage-h">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 id="coverage-h">Where trips begin</h2>
+        <p class="lead">Based in LB Nagar, covering Hyderabad and Secunderabad. The business lists {allAreas.length} localities, and outstation trips can start from any of them.</p>
+      </div>
+      <ul class="tag-list">
+        {locationPages.map((l) => <li><a href={locationHref(l.slug)}>{l.name}</a></li>)}
+        <li><a href="/locations">All service locations</a></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="faq-h">
+    <div class="wrap split">
+      <h2 id="faq-h">Common questions</h2>
+      <div>
+        <Faq items={homeFaqs} />
+        <p style="margin-top:var(--s-5)"><a class="link" href="/faq">Read all FAQs</a></p>
+      </div>
+    </div>
+  </section>
+
+  <FinalCta waMessage={waMsg} planHref="#request" />
+</Base>

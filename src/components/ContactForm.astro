@@ -1,0 +1,38 @@
+---
+import FormShell from './FormShell.astro';
+import { contactTopics } from '../lib/enquiry';
+const id = 'contact-form';
+const f = (k: string) => `${id}-${k}`;
+---
+<FormShell id={id} type="contact" submitLabel="Send message" successTitle="Message received" successNext="We will reply using the phone number or email you gave. Non-urgent messages may take a few hours.">
+  <div class="fields fields--2" style="margin-bottom:var(--s-5)">
+    <div class="field">
+      <label for={f('name')}>Your name</label>
+      <input id={f('name')} name="name" type="text" required autocomplete="name" aria-describedby={`${f('name')}-e`} />
+      <p class="error" id={`${f('name')}-e`}></p>
+    </div>
+    <div class="field">
+      <label for={f('phone')}>Phone number</label>
+      <input id={f('phone')} name="phone" type="tel" required inputmode="tel" autocomplete="tel" aria-describedby={`${f('phone')}-e`} />
+      <p class="error" id={`${f('phone')}-e`}></p>
+    </div>
+    <div class="field">
+      <label for={f('email')}>Email <span class="opt">(optional)</span></label>
+      <input id={f('email')} name="email" type="email" autocomplete="email" aria-describedby={`${f('email')}-e`} />
+      <p class="error" id={`${f('email')}-e`}></p>
+    </div>
+    <div class="field">
+      <label for={f('topic')}>What is this about? <span class="opt">(optional)</span></label>
+      <select id={f('topic')} name="topic" aria-describedby={`${f('topic')}-e`}>
+        <option value="">Choose one</option>
+        {contactTopics.map((c) => <option value={c}>{c}</option>)}
+      </select>
+      <p class="error" id={`${f('topic')}-e`}></p>
+    </div>
+    <div class="field span-2">
+      <label for={f('message')}>Message</label>
+      <textarea id={f('message')} name="message" rows="4" required aria-describedby={`${f('message')}-e`}></textarea>
+      <p class="error" id={`${f('message')}-e`}></p>
+    </div>
+  </div>
+</FormShell>

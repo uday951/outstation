@@ -1,0 +1,22 @@
+---
+import { Picture } from 'astro:assets';
+import interiorNight from '../assets/photos/mobile-icu-interior-night.jpg';
+import interiorDay from '../assets/photos/ambulance-interior-day.webp';
+import pair from '../assets/photos/ambulance-pair-shed.webp';
+import dropoff from '../assets/photos/mobile-icu-hospital-dropoff.webp';
+import lineup from '../assets/photos/ambulance-office-lineup.webp';
+import street from '../assets/photos/three-ambulances-street.webp';
+import freezerRear from '../assets/photos/freezer-ambulance-rear.webp';
+import freezerBox from '../assets/photos/freezer-box-silver.webp';
+
+const images = { interiorNight, interiorDay, pair, dropoff, lineup, street, freezerRear, freezerBox };
+interface Props { name: keyof typeof images; alt: string; caption?: string; sizes?: string; class?: string; eager?: boolean; }
+const { name, alt, caption, sizes = '(min-width: 1040px) 50vw, 100vw', class: cls = 'photo', eager = false } = Astro.props;
+const src = images[name];
+const widths = [480, 800, 1200].filter((w) => w < src.width);
+widths.push(Math.min(src.width, 1600));
+---
+<figure class={cls}>
+  <Picture src={src} formats={['avif', 'webp']} fallbackFormat="jpg" widths={widths} sizes={sizes} alt={alt} loading={eager ? 'eager' : 'lazy'} decoding="async" />
+  {caption && <figcaption>{caption}</figcaption>}
+</figure>

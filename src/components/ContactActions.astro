@@ -1,0 +1,11 @@
+---
+import { business, telHref, waHref } from '../data/business';
+import Icon from './Icon.astro';
+interface Props { waMessage?: string; plan?: boolean; planHref?: string; }
+const { waMessage = 'Hello, I would like to ask about an ambulance.', plan = false, planHref = '/book' } = Astro.props;
+---
+<div class="actions actions--stack">
+  <a class="btn btn--call" href={telHref}><Icon name="phone" />Call {business.phoneDisplay}</a>
+  <a class="btn btn--ghost btn--wa" href={waHref(waMessage)} rel="noopener"><Icon name="whatsapp" />WhatsApp us</a>
+  {plan && <a class="btn btn--ghost" href={planHref}>Send a transfer request</a>}
+</div>

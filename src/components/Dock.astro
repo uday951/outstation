@@ -1,0 +1,13 @@
+---
+import { telHref, waHref } from '../data/business';
+import Icon from './Icon.astro';
+interface Props { waMessage?: string; }
+const message = Astro.props.waMessage ?? 'Hello, I would like to ask about an ambulance.';
+---
+<nav class="dock" aria-label="Quick contact">
+  <a href={telHref}><Icon name="phone" />Call now</a>
+  <a class="wa" href={waHref(message)} rel="noopener"><Icon name="whatsapp" />WhatsApp</a>
+  <a href="/book"><Icon name="form" />Plan</a>
+  <a href="/contact#callback"><Icon name="callback" />Callback</a>
+</nav>
+<aside aria-label="WhatsApp chat"><a class="wa-float" href={waHref(message)} rel="noopener" aria-label="Chat on WhatsApp"><Icon name="whatsapp" /></a></aside>

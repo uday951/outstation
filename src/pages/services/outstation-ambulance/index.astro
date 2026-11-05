@@ -1,0 +1,136 @@
+---
+import Base from '../../../layouts/Base.astro';
+import Crumbs from '../../../components/Crumbs.astro';
+import ContactActions from '../../../components/ContactActions.astro';
+import RouteLadder from '../../../components/RouteLadder.astro';
+import BookingForm from '../../../components/BookingForm.astro';
+import Faq from '../../../components/Faq.astro';
+import Photo from '../../../components/Photo.astro';
+import FinalCta from '../../../components/FinalCta.astro';
+import { service } from '../../../lib/schema';
+import { guides } from '../../../data/guides';
+
+const site = (Astro.site?.href ?? '').replace(/\/$/, '');
+const title = 'Outstation Ambulance in Hyderabad | Intercity & Interstate Transfers';
+const description = 'Intercity and interstate ambulance transfers from Hyderabad, planned around the patient. Oxygen, ALS, ICU or ventilator support. Call or WhatsApp, 24×7.';
+const crumbs = [{ name: 'Home', href: '/' }, { name: 'Services', href: '/services' }, { name: 'Outstation Ambulance', href: '/services/outstation-ambulance' }];
+const url = `${site}/services/outstation-ambulance`;
+const wa = 'Hello, I need an outstation ambulance from Hyderabad.\nPickup area:\nDestination:\nDate:\nPatient condition:';
+
+const faqs = [
+  { q: 'Do you provide ambulance service to any city in India?', a: 'Outstation trips from Hyderabad are coordinated case by case. Route pages cover the most requested destinations. For anywhere else, call to confirm feasibility, timing and cost for your trip.' },
+  { q: 'How is outstation ambulance pricing worked out?', a: 'It depends on distance, vehicle type, crew requirements and trip duration. The coordinator confirms the cost before the trip is booked. Ask what it includes, such as tolls, waiting and return travel.' },
+  { q: 'Can an ICU ambulance travel to another city?', a: 'Yes, ICU-equipped ambulances are available for outstation critical transfers, with continuous monitoring and stops appropriate to the patient’s condition.' },
+  { q: 'How far in advance should I book?', a: 'As early as you can, ideally several hours ahead, so that the right vehicle, crew and route can be confirmed. For urgent cases, call directly and the team will try to arrange it quickly.' },
+  { q: 'Who travels with the patient?', a: 'A driver and a trained attendant or paramedic, depending on the patient’s condition. On longer trips, rest stops and, where needed, driver changes are planned.' },
+  { q: 'Can you pick up from another city and come to Hyderabad?', a: 'Trips are generally planned from Hyderabad, but transfers into the city can be discussed. Tell the coordinator the actual pickup point, and they will confirm what is possible.' },
+];
+---
+<Base
+  title={title}
+  description={description}
+  crumbs={crumbs}
+  waMessage={wa}
+  schema={[service(site, url, 'Outstation Ambulance', description, 'Long-distance patient transport', { '@type': 'Country', name: 'India' })]}
+>
+  <Crumbs items={crumbs} />
+  <section class="page-hero">
+    <div class="wrap hero-grid">
+      <div>
+        <p class="eyebrow">Long-distance patient transport</p>
+        <h1 class="h1-page" style="margin-top:var(--s-3)">Outstation ambulance service from Hyderabad</h1>
+        <p class="lead">Intercity and interstate patient transfers, arranged for the specific journey. Each trip is planned around the patient, not sold as a one-size package.</p>
+        <ContactActions plan planHref="#request" waMessage={wa} />
+      </div>
+      <Photo name="pair" alt="A large Advanced Life Support ambulance and a smaller ambulance parked under a shed" eager sizes="(min-width: 1040px) 40vw, 100vw" />
+    </div>
+  </section>
+
+  <section class="section section--line" aria-labelledby="r-h">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 id="r-h">Frequently requested routes</h2>
+        <p class="lead">For any other destination, call or WhatsApp us and we will confirm the arrangements.</p>
+      </div>
+      <RouteLadder />
+      <p class="small muted" style="margin-top:var(--s-4)">Distances and times are planning estimates. They vary with traffic, stops and the patient’s condition.</p>
+    </div>
+  </section>
+
+  <section class="section section--sand" aria-labelledby="w-h">
+    <div class="wrap split split--even">
+      <div>
+        <h2 id="w-h">Why a long trip is different</h2>
+        <div class="prose" style="margin-top:var(--s-5)">
+          <p>The business is based in Hyderabad and runs its core fleet across the city. For long-distance transport, it coordinates the vehicle, crew and route for the journey you need, whether that is a few hours to a nearby city or a much longer interstate trip.</p>
+          <p>Because every trip differs in distance, road conditions and the patient’s needs, the specific vehicle, crew and rest stops are confirmed with you directly. That is also why there is no fixed fare on this page.</p>
+        </div>
+      </div>
+      <div>
+        <h3>Families use it for</h3>
+        <ul class="ticks" style="margin-top:var(--s-4)">
+          <li>Interstate hospital transfers</li>
+          <li>Patients going home after treatment in Hyderabad</li>
+          <li>Long-distance transport to specialist care</li>
+          <li>Transfers to a native place for ongoing care</li>
+          <li>Long-distance transport of a deceased family member (<a class="link" href="/services/dead-body-freezer-box">freezer box service</a>)</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="cost-h">
+    <div class="wrap split">
+      <div>
+        <h2 id="cost-h">What affects the cost</h2>
+        <p class="lead" style="margin-top:var(--s-4)">The coordinator quotes for your trip before it is booked. Knowing what drives the number helps you compare quotes fairly.</p>
+      </div>
+      <div class="rows">
+        <div style="padding-block:var(--s-4)"><h3>Distance and duration</h3><p class="muted">Kilometres matter, and so do total hours, including any waiting at either end.</p></div>
+        <div style="padding-block:var(--s-4)"><h3>Vehicle and equipment</h3><p class="muted">A BLS ambulance and a full ICU setup are very different vehicles to run.</p></div>
+        <div style="padding-block:var(--s-4)"><h3>Crew</h3><p class="muted">Whether an attendant or a paramedic is needed, and any crew changes on long routes.</p></div>
+        <div style="padding-block:var(--s-4)"><h3>Questions to ask</h3><p class="muted">Are tolls included? Is there a waiting charge? Is night travel extra? Is a return journey part of the price?</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--ink on-dark" aria-labelledby="s-h">
+    <div class="wrap">
+      <div class="section-head"><h2 id="s-h">What happens after you call</h2></div>
+      <ol class="steps steps--4">
+        <li><h3>Share the destination</h3><p>Tell us the patient’s condition, the pickup point and the destination.</p></li>
+        <li><h3>We confirm feasibility</h3><p>Vehicle, crew, route and estimated duration are confirmed with you before dispatch.</p></li>
+        <li><h3>The journey begins</h3><p>The patient is monitored by the crew, with planned stops on longer distances.</p></li>
+        <li><h3>Arrival and handover</h3><p>The patient is handed over at the hospital or home with a full status update.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="section" id="request" aria-labelledby="f-h">
+    <div class="wrap split">
+      <div class="sticky-side">
+        <h2 id="f-h">Send your trip details</h2>
+        <p class="lead" style="margin-top:var(--s-4)">A coordinator will call you back. Sending this form does not book the trip.</p>
+      </div>
+      <BookingForm id="outstation-request" />
+    </div>
+  </section>
+
+  <section class="section section--line" aria-labelledby="g-h">
+    <div class="wrap split">
+      <h2 id="g-h">Planning guides</h2>
+      <div class="rows">
+        {guides.map((g) => <a class="row-link" style="grid-template-columns:1fr" href={`/blog/${g.slug}`}><h3>{g.title}</h3><p>{g.summary}</p></a>)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--sand" aria-labelledby="q-h">
+    <div class="wrap split">
+      <h2 id="q-h">Outstation ambulance questions</h2>
+      <Faq items={faqs} />
+    </div>
+  </section>
+
+  <FinalCta waMessage={wa} planHref="#request" title="Tell us where the patient needs to go." />
+</Base>

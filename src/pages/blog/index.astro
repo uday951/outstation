@@ -1,0 +1,30 @@
+---
+import Base from '../../layouts/Base.astro';
+import Crumbs from '../../components/Crumbs.astro';
+import FinalCta from '../../components/FinalCta.astro';
+import { guides } from '../../data/guides';
+const crumbs = [{ name: 'Home', href: '/' }, { name: 'Guides', href: '/blog' }];
+---
+<Base title="Long-Distance Patient Transfer Guides for Families | Best Ambulance" description="Practical guides for families arranging a long-distance ambulance: booking steps, choosing a vehicle, oxygen planning, and hospital-to-hospital transfers." crumbs={crumbs}>
+  <Crumbs items={crumbs} />
+  <section class="page-hero">
+    <div class="wrap">
+      <h1 class="h1-page">Guides for families arranging a transfer</h1>
+      <p class="lead">Plain answers for an unfamiliar situation. General information only: the treating doctor decides what is safe for your patient.</p>
+    </div>
+  </section>
+  <section class="section--tight">
+    <div class="wrap">
+      <div class="rows">
+        {guides.map((g) => (
+          <a class="row-link" href={`/blog/${g.slug}`}>
+            <h2 style="font-size:var(--t-h3);font-stretch:100%;font-weight:650;letter-spacing:-0.005em;line-height:1.2">{g.title}</h2>
+            <p>{g.summary}</p>
+            <span class="go" aria-hidden="true">Read guide</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+  <FinalCta />
+</Base>

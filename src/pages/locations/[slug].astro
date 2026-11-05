@@ -1,0 +1,96 @@
+---
+import Base from '../../layouts/Base.astro';
+import Crumbs from '../../components/Crumbs.astro';
+import ContactActions from '../../components/ContactActions.astro';
+import RouteLadder from '../../components/RouteLadder.astro';
+import Faq from '../../components/Faq.astro';
+import FinalCta from '../../components/FinalCta.astro';
+import { service } from '../../lib/schema';
+import { locationPages, locationBySlug, locationHref, type LocationPage } from '../../data/locations';
+import { routeBySlug } from '../../data/routes';
+
+export function getStaticPaths() {
+  return locationPages.map((l) => ({ params: { slug: l.slug }, props: { l } }));
+}
+const { l } = Astro.props as { l: LocationPage };
+const site = (Astro.site?.href ?? '').replace(/\/$/, '');
+const crumbs = [{ name: 'Home', href: '/' }, { name: 'Service Locations', href: '/locations' }, { name: l.name, href: locationHref(l.slug) }];
+const url = `${site}${locationHref(l.slug)}`;
+const wa = `Hello, I need an ambulance in ${l.name}.\nExact location:\nDestination:\nPatient condition:`;
+const corridors = l.corridors.map((c) => routeBySlug(c)!).sort((a, b) => a.km - b.km);
+const area = l.slug === 'hyderabad' || l.slug === 'secunderabad' ? { '@type': 'City', name: l.name } : { '@type': 'Place', name: `${l.name}, Hyderabad` };
+---
+<Base title={l.title} description={l.description} crumbs={crumbs} waMessage={wa} schema={[service(site, url, `Ambulance services in ${l.name}`, l.description, 'Ambulance service', area)]}>
+  <Crumbs items={crumbs} />
+  <section class="page-hero">
+    <div class="wrap">
+      <p class="eyebrow">Service location</p>
+      <h1 class="h1-page" style="margin-top:var(--s-3)">Ambulance services in {l.name}</h1>
+      <p class="lead">{l.lead}</p>
+      <ContactActions plan waMessage={wa} />
+    </div>
+  </section>
+
+  <section class="section section--line" aria-labelledby="a-h">
+    <div class="wrap split split--aside">
+      <div class="prose">
+        <h2 id="a-h" style="margin-top:0">Coverage in {l.name}</h2>
+        {l.body.map((p) => <p>{p}</p>)}
+      </div>
+      <div class="sticky-side">
+        <h3>Services available</h3>
+        <ul class="tag-list" style="margin-top:var(--s-4)">
+          <li><a href="/services/emergency-ambulance">Emergency</a></li>
+          <li><a href="/services/icu-ambulance">ICU</a></li>
+          <li><a href="/services/cardiac-ambulance">Cardiac</a></li>
+          <li><a href="/services/patient-transport">Patient transport</a></li>
+          <li><a href="/services/outstation-ambulance">Outstation</a></li>
+          <li><a href="/services/dead-body-freezer-box">Freezer box</a></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--sand" aria-labelledby="n-h">
+    <div class="wrap grid-2">
+      <div>
+        <h2 id="n-h" style="font-size:clamp(1.75rem,1.4rem + 1.3vw,2.5rem);margin-bottom:var(--s-5)">Hospitals nearby</h2>
+        <ul class="ticks">{l.hospitals.map((h) => <li>{h}</li>)}</ul>
+        <p class="small muted" style="margin-top:var(--s-4)">Named to help you describe the area. This does not imply any partnership.</p>
+      </div>
+      <div>
+        <h2 style="font-size:clamp(1.75rem,1.4rem + 1.3vw,2.5rem);margin-bottom:var(--s-5)">Landmarks to mention</h2>
+        <ul class="ticks">{l.landmarks.map((h) => <li>{h}</li>)}</ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="o-h">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 id="o-h">Long-distance trips from {l.name}</h2>
+        <p class="lead">{l.outstation}</p>
+      </div>
+      <RouteLadder items={corridors} />
+    </div>
+  </section>
+
+  <section class="section section--line" aria-labelledby="q-h">
+    <div class="wrap split">
+      <h2 id="q-h">{l.name} questions</h2>
+      <Faq items={l.faqs} />
+    </div>
+  </section>
+
+  <section class="section--tight section--line" aria-labelledby="near-h">
+    <div class="wrap">
+      <h2 id="near-h" style="font-size:var(--t-h3);margin-bottom:var(--s-4)">Nearby areas</h2>
+      <ul class="tag-list">
+        {l.nearby.map((n) => <li><a href={locationHref(n)}>{locationBySlug(n)?.name}</a></li>)}
+        <li><a href="/locations">All service locations</a></li>
+      </ul>
+    </div>
+  </section>
+
+  <FinalCta waMessage={wa} />
+</Base>

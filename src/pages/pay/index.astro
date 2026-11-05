@@ -1,0 +1,91 @@
+---
+import Base from '../../layouts/Base.astro';
+import Crumbs from '../../components/Crumbs.astro';
+import Icon from '../../components/Icon.astro';
+import { business, telHref, waHref } from '../../data/business';
+import { MIN_ADVANCE, MAX_ADVANCE } from '../../lib/payment';
+
+const crumbs = [{ name: 'Home', href: '/' }, { name: 'Pay an Advance', href: '/pay' }];
+const id = 'pay-form';
+const f = (k: string) => `${id}-${k}`;
+---
+<Base title="Pay an Ambulance Advance Online | Best Ambulance Service" description="Pay the advance for a scheduled ambulance your coordinator has confirmed. Secure online payment through Cashfree. Never needed before an emergency dispatch." crumbs={crumbs} noindex>
+  <Crumbs items={crumbs} />
+  <section class="page-hero" style="padding-bottom:var(--s-6)">
+    <div class="wrap">
+      <h1 class="h1-page">Pay an advance</h1>
+      <p class="lead">For a scheduled trip, once a coordinator has confirmed the vehicle and the cost with you.</p>
+    </div>
+  </section>
+  <section style="padding-bottom:var(--section)">
+    <div class="wrap split split--aside">
+      <div>
+        <h2 class="sr-only">Payment details</h2>
+        <form id={id} class="form" action="/api/payment/create" method="post" data-pay>
+          <p class="form-note"><strong>Emergencies need no payment first.</strong> Call <a href={telHref}>{business.phoneDisplay}</a> and the ambulance is sent. Billing is discussed afterwards.</p>
+          <noscript><p class="form-note">Online payment needs JavaScript. Please call <a href={telHref}>{business.phoneDisplay}</a> to arrange payment.</p></noscript>
+          <div class="form-summary" data-summary tabindex="-1" role="alert" hidden></div>
+          <div class="form-result form-result--fail" data-failure tabindex="-1" role="alert" hidden>
+            <h3>Payment did not start</h3>
+            <p data-failure-text></p>
+            <p>You have not been charged. Please reach us directly:</p>
+            <div class="actions">
+              <a class="btn btn--call btn--small" href={telHref}><Icon name="phone" />Call {business.phoneDisplay}</a>
+              <a class="btn btn--ghost btn--wa btn--small" href={waHref('Hello, I would like to pay an ambulance advance.')} rel="noopener"><Icon name="whatsapp" />WhatsApp us</a>
+            </div>
+          </div>
+
+          <div class="fields fields--2" style="margin-bottom:var(--s-5)">
+            <div class="field">
+              <label for={f('name')}>Name of the person paying</label>
+              <input id={f('name')} name="name" type="text" required autocomplete="name" aria-describedby={`${f('name')}-e`} />
+              <p class="error" id={`${f('name')}-e`}></p>
+            </div>
+            <div class="field">
+              <label for={f('phone')}>Phone number</label>
+              <input id={f('phone')} name="phone" type="tel" required inputmode="tel" autocomplete="tel" aria-describedby={`${f('phone')}-e`} />
+              <p class="error" id={`${f('phone')}-e`}></p>
+            </div>
+            <div class="field">
+              <label for={f('amount')}>Advance amount (₹)</label>
+              <input id={f('amount')} name="amount" type="text" required inputmode="decimal" autocomplete="off" aria-describedby={`${f('amount')}-h ${f('amount')}-e`} />
+              <p class="hint" id={`${f('amount')}-h`}>The amount your coordinator gave you. ₹{MIN_ADVANCE} to ₹{MAX_ADVANCE.toLocaleString('en-IN')} online.</p>
+              <p class="error" id={`${f('amount')}-e`}></p>
+            </div>
+            <div class="field">
+              <label for={f('reference')}>Booking reference <span class="opt">(optional)</span></label>
+              <input id={f('reference')} name="reference" type="text" autocomplete="off" aria-describedby={`${f('reference')}-h ${f('reference')}-e`} />
+              <p class="hint" id={`${f('reference')}-h`}>From your request confirmation, for example BA-261104-9FEF.</p>
+              <p class="error" id={`${f('reference')}-e`}></p>
+            </div>
+            <div class="field span-2">
+              <label for={f('email')}>Email <span class="opt">(optional)</span></label>
+              <input id={f('email')} name="email" type="email" autocomplete="email" aria-describedby={`${f('email')}-e`} />
+              <p class="error" id={`${f('email')}-e`}></p>
+            </div>
+            <div class="field span-2">
+              <div class="check">
+                <input id={f('agree')} name="agree" type="checkbox" value="yes" required aria-describedby={`${f('agree')}-e`} />
+                <label for={f('agree')}>I have read the <a class="link" href="/refund-policy" target="_blank">Refund Policy</a> and <a class="link" href="/cancellation-policy" target="_blank">Cancellation Policy</a>.</label>
+              </div>
+              <p class="error" id={`${f('agree')}-e`}></p>
+            </div>
+          </div>
+          <button class="btn btn--call" style="width:100%" type="submit"><span data-label>Continue to secure payment</span></button>
+          <p class="form-legal">You will pay on Cashfree’s secure checkout. Your card, UPI or bank details go to Cashfree and are not seen or stored by this website. See the <a href="/privacy-policy">Privacy Policy</a>.</p>
+        </form>
+      </div>
+      <aside class="sticky-side">
+        <h2 style="font-size:var(--t-h3);font-stretch:100%;font-weight:650;letter-spacing:-0.005em;line-height:1.2">Before you pay</h2>
+        <ul class="ticks" style="margin-top:var(--s-3)">
+          <li>Pay only after a coordinator has confirmed your trip and the amount.</li>
+          <li>Paying online does not by itself book a vehicle.</li>
+          <li>Not spoken to us yet? <a class="link" href="/book">Send your trip details</a> or <a class="link" href={telHref}>call us</a>.</li>
+        </ul>
+      </aside>
+    </div>
+  </section>
+</Base>
+<script>
+  import '../../scripts/pay.ts';
+</script>

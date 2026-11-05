@@ -1,0 +1,28 @@
+---
+import Base from '../layouts/Base.astro';
+import Crumbs from '../components/Crumbs.astro';
+import { legalPages, type LegalPage } from '../data/legal';
+
+export function getStaticPaths() {
+  return legalPages.map((p) => ({ params: { legal: p.slug }, props: { p } }));
+}
+const { p } = Astro.props as { p: LegalPage };
+const crumbs = [{ name: 'Home', href: '/' }, { name: p.title, href: `/${p.slug}` }];
+const html = p.html.replace(/\[CONFIRM:?([^\]]*)\]/g, '<mark>[CONFIRM$1]</mark>');
+---
+<Base title={p.metaTitle} description={p.description} crumbs={crumbs} noindex={!p.reviewed}>
+  <Crumbs items={crumbs} />
+  <section class="page-hero">
+    <div class="wrap">
+      <h1 class="h1-page">{p.title}</h1>
+      <p class="lead">{p.summary}</p>
+    </div>
+  </section>
+  <section class="section--tight section--line" style="padding-bottom:var(--section)">
+    <div class="wrap">
+      {!p.reviewed && <p class="draft-banner">DRAFT - BUSINESS REVIEW REQUIRED. This text has not yet been approved by the business or a lawyer. Highlighted items need to be confirmed.</p>}
+      <div class="prose" set:html={html} />
+      <p class="small muted" style="margin-top:var(--s-6)">Prepared November 2026.</p>
+    </div>
+  </section>
+</Base>

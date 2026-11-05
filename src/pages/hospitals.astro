@@ -1,0 +1,44 @@
+---
+import Base from '../layouts/Base.astro';
+import Crumbs from '../components/Crumbs.astro';
+import ContactActions from '../components/ContactActions.astro';
+import FinalCta from '../components/FinalCta.astro';
+import { hospitals } from '../data/locations';
+const crumbs = [{ name: 'Home', href: '/' }, { name: 'Hospitals', href: '/hospitals' }];
+---
+<Base title="Ambulance Transfers to & from Hyderabad Hospitals | Patient Discharge" description="Discharges and transfers to and from Apollo, NIMS, AIG, Yashoda, Osmania and other Hyderabad hospitals, including long-distance trips home from the ward." crumbs={crumbs}>
+  <Crumbs items={crumbs} />
+  <section class="page-hero">
+    <div class="wrap">
+      <h1 class="h1-page">Transfers to and from Hyderabad’s hospitals</h1>
+      <p class="lead">Patients are moved to and from hospitals across the city, including discharges that continue to another city.</p>
+      <ContactActions plan />
+    </div>
+  </section>
+  <section class="section section--line" aria-labelledby="l-h">
+    <div class="wrap split">
+      <div>
+        <h2 id="l-h">Hospitals families often ask about</h2>
+        <p class="small muted" style="margin-top:var(--s-4)">Named only to help you find this service. This list does not imply any partnership with or endorsement by these hospitals. Your hospital does not need to be listed here.</p>
+      </div>
+      <ul class="rows" style="list-style:none;padding:0">
+        {hospitals.map((h) => <li style="display:flex;justify-content:space-between;gap:var(--s-4);padding-block:var(--s-3)"><span style="font-weight:600">{h.name}</span><span class="muted" style="text-align:right">{h.area}</span></li>)}
+      </ul>
+    </div>
+  </section>
+  <section class="section section--sand" aria-labelledby="t-h">
+    <div class="wrap split">
+      <h2 id="t-h">Before you book a hospital pickup</h2>
+      <div class="prose">
+        <ul class="ticks">
+          <li>Ask the ward for a realistic discharge time. Billing and paperwork often take longer than expected.</li>
+          <li>Ask the treating doctor what level of care the patient needs on the way.</li>
+          <li>For a transfer, confirm the bed at the receiving hospital before leaving.</li>
+          <li>Tell the coordinator the hospital block, ward and floor, and which gate to use.</li>
+        </ul>
+        <p><a href="/blog/hospital-to-hospital-transfer-guidance">Read the full hospital transfer guide</a> or see the <a href="/services/hospital-transfer">hospital-to-hospital transfer service</a>.</p>
+      </div>
+    </div>
+  </section>
+  <FinalCta />
+</Base>

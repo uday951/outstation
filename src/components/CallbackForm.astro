@@ -1,0 +1,27 @@
+---
+import FormShell from './FormShell.astro';
+import { callbackWindows } from '../lib/enquiry';
+const id = 'callback-form';
+const f = (k: string) => `${id}-${k}`;
+---
+<FormShell id={id} type="callback" submitLabel="Request a callback" whatsapp={false} successTitle="Callback requested" successNext="A coordinator will call the number you gave. Callback time depends on how busy the dispatch line is.">
+  <div class="fields" style="margin-bottom:var(--s-5)">
+    <div class="field">
+      <label for={f('name')}>Your name</label>
+      <input id={f('name')} name="name" type="text" required autocomplete="name" aria-describedby={`${f('name')}-e`} />
+      <p class="error" id={`${f('name')}-e`}></p>
+    </div>
+    <div class="field">
+      <label for={f('phone')}>Phone number</label>
+      <input id={f('phone')} name="phone" type="tel" required inputmode="tel" autocomplete="tel" aria-describedby={`${f('phone')}-e`} />
+      <p class="error" id={`${f('phone')}-e`}></p>
+    </div>
+    <div class="field">
+      <label for={f('window')}>Best time to call <span class="opt">(optional)</span></label>
+      <select id={f('window')} name="window" aria-describedby={`${f('window')}-e`}>
+        {callbackWindows.map((c) => <option value={c}>{c}</option>)}
+      </select>
+      <p class="error" id={`${f('window')}-e`}></p>
+    </div>
+  </div>
+</FormShell>

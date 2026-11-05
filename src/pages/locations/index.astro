@@ -1,0 +1,58 @@
+---
+import Base from '../../layouts/Base.astro';
+import Crumbs from '../../components/Crumbs.astro';
+import ContactActions from '../../components/ContactActions.astro';
+import RouteLadder from '../../components/RouteLadder.astro';
+import FinalCta from '../../components/FinalCta.astro';
+import { locationPages, locationHref, allAreas } from '../../data/locations';
+import { routesByKm } from '../../data/routes';
+
+const crumbs = [{ name: 'Home', href: '/' }, { name: 'Service Locations', href: '/locations' }];
+const linked = new Map(locationPages.map((l) => [l.name, l.slug]));
+---
+<Base title="Ambulance Service Locations in Hyderabad & Secunderabad" description="Where Best Ambulance Service operates: 35 Hyderabad and Secunderabad localities, plus outstation routes from Hyderabad to cities across India." crumbs={crumbs}>
+  <Crumbs items={crumbs} />
+  <section class="page-hero">
+    <div class="wrap">
+      <h1 class="h1-page">Service locations</h1>
+      <p class="lead">Based in LB Nagar, covering Hyderabad and Secunderabad, with long-distance trips from Hyderabad to other cities on request.</p>
+      <ContactActions plan />
+    </div>
+  </section>
+
+  <section class="section section--line" aria-labelledby="k-h">
+    <div class="wrap">
+      <div class="section-head"><h2 id="k-h">Local coverage guides</h2></div>
+      <div class="rows">
+        {locationPages.map((l) => (
+          <a class="row-link" href={locationHref(l.slug)}>
+            <h3>{l.name}</h3>
+            <p>{l.lead}</p>
+            <span class="go" aria-hidden="true">View area</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--sand" aria-labelledby="a-h">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 id="a-h">All {allAreas.length} listed localities</h2>
+        <p class="lead">If your area is not listed, call. Nearby areas can often still be reached.</p>
+      </div>
+      <ul class="tag-list">
+        {allAreas.map((a) => <li>{linked.has(a) ? <a href={locationHref(linked.get(a)!)}>{a}</a> : <span>{a}</span>}</li>)}
+      </ul>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="r-h">
+    <div class="wrap">
+      <div class="section-head"><h2 id="r-h">Outstation routes from Hyderabad</h2></div>
+      <RouteLadder items={routesByKm} />
+    </div>
+  </section>
+
+  <FinalCta />
+</Base>

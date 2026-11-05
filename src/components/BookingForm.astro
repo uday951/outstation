@@ -1,0 +1,102 @@
+---
+import FormShell from './FormShell.astro';
+import { ambulanceTypes, patientConditions, supportNeeds, companionOptions, todayIST } from '../lib/enquiry';
+interface Props { id?: string; destination?: string; ambulanceType?: string; }
+const { id = 'request-form', destination = '', ambulanceType = '' } = Astro.props;
+const f = (k: string) => `${id}-${k}`;
+const today = todayIST();
+---
+<FormShell
+  id={id}
+  type="booking"
+  submitLabel="Send transfer request"
+  successTitle="We have your transfer request"
+  successNext="A coordinator will call the number you gave to confirm the vehicle, crew, route and cost. The trip is not booked until they have confirmed it with you."
+>
+  <fieldset>
+    <legend>The journey</legend>
+    <div class="fields fields--2">
+      <div class="field">
+        <label for={f('pickup')}>Pickup location</label>
+        <input id={f('pickup')} name="pickup" type="text" required autocomplete="street-address" aria-describedby={`${f('pickup')}-e`} />
+        <button class="loc-btn" type="button" data-use-location>Use my current location</button>
+        <p class="error" id={`${f('pickup')}-e`}></p>
+      </div>
+      <div class="field">
+        <label for={f('destination')}>Destination city and address</label>
+        <input id={f('destination')} name="destination" type="text" required value={destination} aria-describedby={`${f('destination')}-e`} />
+        <p class="error" id={`${f('destination')}-e`}></p>
+      </div>
+      <div class="field">
+        <label for={f('date')}>Journey date</label>
+        <input id={f('date')} name="date" type="date" required min={today} aria-describedby={`${f('date')}-e`} />
+        <p class="error" id={`${f('date')}-e`}></p>
+      </div>
+      <div class="field">
+        <label for={f('time')}>Preferred departure time <span class="opt">(optional)</span></label>
+        <input id={f('time')} name="time" type="time" aria-describedby={`${f('time')}-e`} />
+        <p class="error" id={`${f('time')}-e`}></p>
+      </div>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>The patient</legend>
+    <div class="fields fields--2">
+      <div class="field">
+        <label for={f('condition')}>Patient’s condition</label>
+        <select id={f('condition')} name="condition" required aria-describedby={`${f('condition')}-e`}>
+          <option value="">Choose one</option>
+          {patientConditions.map((c) => <option value={c}>{c}</option>)}
+        </select>
+        <p class="error" id={`${f('condition')}-e`}></p>
+      </div>
+      <div class="field">
+        <label for={f('ambulanceType')}>Ambulance type</label>
+        <select id={f('ambulanceType')} name="ambulanceType" required aria-describedby={`${f('ambulanceType')}-e`}>
+          <option value="">Choose one</option>
+          {ambulanceTypes.map((c) => <option value={c} selected={c === ambulanceType}>{c}</option>)}
+        </select>
+        <p class="error" id={`${f('ambulanceType')}-e`}></p>
+      </div>
+      <div class="field">
+        <label for={f('support')}>Oxygen or ventilator needed? <span class="opt">(optional)</span></label>
+        <select id={f('support')} name="support" aria-describedby={`${f('support')}-e`}>
+          <option value="">Choose one</option>
+          {supportNeeds.map((c) => <option value={c}>{c}</option>)}
+        </select>
+        <p class="error" id={`${f('support')}-e`}></p>
+      </div>
+      <div class="field">
+        <label for={f('companions')}>Family members travelling <span class="opt">(optional)</span></label>
+        <select id={f('companions')} name="companions" aria-describedby={`${f('companions')}-e`}>
+          <option value="">Choose one</option>
+          {companionOptions.map((c) => <option value={c}>{c}</option>)}
+        </select>
+        <p class="error" id={`${f('companions')}-e`}></p>
+      </div>
+      <div class="field span-2">
+        <label for={f('notes')}>Additional requirements <span class="opt">(optional)</span></label>
+        <textarea id={f('notes')} name="notes" rows="3" aria-describedby={`${f('notes')}-h ${f('notes')}-e`}></textarea>
+        <p class="hint" id={`${f('notes')}-h`}>For example stops, a return trip or wheelchair help. No need to share a diagnosis or medical records here; the coordinator will ask for what they need.</p>
+        <p class="error" id={`${f('notes')}-e`}></p>
+      </div>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>Who should we call?</legend>
+    <div class="fields fields--2">
+      <div class="field">
+        <label for={f('name')}>Your name</label>
+        <input id={f('name')} name="name" type="text" required autocomplete="name" aria-describedby={`${f('name')}-e`} />
+        <p class="error" id={`${f('name')}-e`}></p>
+      </div>
+      <div class="field">
+        <label for={f('phone')}>Phone number</label>
+        <input id={f('phone')} name="phone" type="tel" required inputmode="tel" autocomplete="tel" aria-describedby={`${f('phone')}-e`} />
+        <p class="error" id={`${f('phone')}-e`}></p>
+      </div>
+    </div>
+  </fieldset>
+</FormShell>

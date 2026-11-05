@@ -1,0 +1,76 @@
+---
+import '../styles/global.css';
+import fontUrl from '@fontsource-variable/archivo/files/archivo-latin-wdth-normal.woff2?url';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import Dock from '../components/Dock.astro';
+import { organization, website, webpage, breadcrumbs } from '../lib/schema';
+import { business } from '../data/business';
+
+interface Props {
+  title: string;
+  description: string;
+  crumbs?: { name: string; href: string }[];
+  schema?: object[];
+  noindex?: boolean;
+  pageType?: string;
+  waMessage?: string;
+}
+const { title, description, crumbs, schema = [], noindex = false, pageType = 'WebPage', waMessage } = Astro.props;
+const site = (Astro.site?.href ?? '').replace(/\/$/, '');
+const path = Astro.url.pathname.replace(/\.html$/, '').replace(/\/$/, '');
+const canonical = `${site}${path}`;
+// Only the real domain may be indexed, so a staging address can't compete with it in search.
+const indexable = !noindex && Astro.site?.host === 'bestambulance.in';
+const ogImage = `${site}/og.jpg`;
+
+const graph = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    organization(site),
+    website(site),
+    webpage(site, canonical || site, title, description, pageType),
+    ...(crumbs ? [breadcrumbs(site, crumbs)] : []),
+    ...schema,
+  ],
+};
+---
+<!doctype html>
+<html lang="en-IN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical || site} />
+    {!indexable && <meta name="robots" content="noindex, follow" />}
+    <meta name="theme-color" content="#f6f3ed" />
+    <link rel="preload" href={fontUrl} as="font" type="font/woff2" crossorigin />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/logo.png" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={business.name} />
+    <meta property="og:locale" content="en_IN" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical || site} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Best Ambulance Service ambulances parked on a Hyderabad street" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+    <script type="application/ld+json" set:html={JSON.stringify(graph).replace(/</g, '\\u003c')} />
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to main content</a>
+    <Header />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
+    <Dock waMessage={waMessage} />
+  </body>
+</html>

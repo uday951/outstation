@@ -1,0 +1,63 @@
+---
+import Base from '../layouts/Base.astro';
+import Crumbs from '../components/Crumbs.astro';
+import ContactActions from '../components/ContactActions.astro';
+import Photo from '../components/Photo.astro';
+import FinalCta from '../components/FinalCta.astro';
+import { business } from '../data/business';
+const crumbs = [{ name: 'Home', href: '/' }, { name: 'About', href: '/about' }];
+---
+<Base title="About Best Ambulance Service | Hyderabad Ambulance Operator" description="Founded by Lucky and based in LB Nagar, Best Ambulance Service began with one vehicle and now runs emergency, ICU and long-distance transfers across Hyderabad." crumbs={crumbs} pageType="AboutPage">
+  <Crumbs items={crumbs} />
+  <section class="page-hero">
+    <div class="wrap hero-grid">
+      <div>
+        <h1 class="h1-page">Answer the phone. Send the right ambulance.</h1>
+        <p class="lead">That idea started with a single vehicle in Hyderabad, and it still guides how the business works.</p>
+        <ContactActions />
+      </div>
+      <Photo name="lineup" alt="Ambulances parked outside the Best Ambulance Service office" eager sizes="(min-width: 1040px) 40vw, 100vw" />
+    </div>
+  </section>
+
+  <section class="section section--line" aria-labelledby="s-h">
+    <div class="wrap split">
+      <h2 id="s-h">How it started</h2>
+      <div class="prose">
+        <p>Best Ambulance Service was founded by {business.founder}, who saw that in an emergency, minutes lost looking for a reliable number or waiting for an unsuitable vehicle can matter a great deal.</p>
+        <p>What began as a single-vehicle operation has grown into a fleet covering emergency response, ICU transfers, cardiac care and long-distance patient transport. The principle stayed the same: answer the phone, send the right ambulance, and get the patient to care without delay.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--sand" aria-labelledby="e-h">
+    <div class="wrap">
+      <div class="section-head"><h2 id="e-h">What you can expect from us</h2></div>
+      <ol class="steps steps--4">
+        <li><h3>A person on the line</h3><p>A coordinator answers your call directly, with no automated hold menu in an emergency.</p></li>
+        <li><h3>Honest timing</h3><p>You are told which type of ambulance is coming, and given an honest estimate of arrival.</p></li>
+        <li><h3>Care from arrival</h3><p>Paramedics begin assessment and stabilisation on-site where needed, not only after reaching hospital.</p></li>
+        <li><h3>A proper handover</h3><p>The crew coordinates with the receiving hospital wherever possible, so that handover is quick.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="b-h">
+    <div class="wrap split">
+      <div>
+        <h2 id="b-h">Related brands</h2>
+        <p class="lead" style="margin-top:var(--s-4)">{business.founder} also operates a small group of focused ambulance and after-care brands in Hyderabad.</p>
+      </div>
+      <div class="rows">
+        {business.brands.map((b) => (
+          <a class="row-link" style="grid-template-columns:1fr" href={b.url} rel="noopener">
+            <h3>{b.name}</h3>
+            <p>{b.note}</p>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <FinalCta />
+</Base>

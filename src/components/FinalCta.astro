@@ -1,0 +1,20 @@
+---
+import ContactActions from './ContactActions.astro';
+import { business } from '../data/business';
+interface Props { title?: string; text?: string; waMessage?: string; planHref?: string; }
+const {
+  title = 'Save this number before you need it.',
+  text = `${business.phoneDisplay} is answered around the clock. For a planned transfer, you can also send the details first and a coordinator will call you.`,
+  waMessage,
+  planHref = '/book',
+} = Astro.props;
+---
+<section class="section section--ink on-dark final-cta">
+  <div class="wrap final-grid">
+    <h2>{title}</h2>
+    <div>
+      <p class="lead">{text}</p>
+      <ContactActions plan planHref={planHref} waMessage={waMessage} />
+    </div>
+  </div>
+</section>

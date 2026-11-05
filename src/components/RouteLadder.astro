@@ -1,0 +1,21 @@
+---
+// Every destination drawn to the same kilometre scale, so distance reads at a glance.
+import { routesByKm, routeHref, type Route } from '../data/routes';
+interface Props { items?: Route[]; headingLevel?: 'h2' | 'h3'; }
+const items = Astro.props.items ?? routesByKm;
+const max = Math.max(...routesByKm.map((r) => r.km));
+---
+<div>
+  <div class="ladder-origin" aria-hidden="true"><span>From Hyderabad</span><span class="num">Drawn to scale, 0 to {max.toLocaleString('en-IN')} km</span></div>
+  <ul class="ladder" style="list-style:none;padding:0">
+    {items.map((r) => (
+      <li class="ladder-row">
+        <a href={routeHref(r)}>
+          <span class="ladder-name">{r.city}</span>
+          <span class="ladder-track" aria-hidden="true"><span class="ladder-bar" style={`--w:${((r.km / max) * 100).toFixed(1)}%`}></span></span>
+          <span class="ladder-meta num"><strong>{r.kmLabel}</strong><br />{r.hours}</span>
+        </a>
+      </li>
+    ))}
+  </ul>
+</div>

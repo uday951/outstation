@@ -1,0 +1,28 @@
+---
+import Base from '../layouts/Base.astro';
+import Crumbs from '../components/Crumbs.astro';
+import ContactActions from '../components/ContactActions.astro';
+import Faq from '../components/Faq.astro';
+import FinalCta from '../components/FinalCta.astro';
+import { faqGroups } from '../data/faqs';
+const crumbs = [{ name: 'Home', href: '/' }, { name: 'FAQ', href: '/faq' }];
+---
+<Base title="Outstation Ambulance FAQ: Cost, Booking, Crew & Oxygen" description="Answers on booking a long-distance ambulance from Hyderabad: how cost is worked out, who travels with the patient, ICU options and how far ahead to book." crumbs={crumbs}>
+  <Crumbs items={crumbs} />
+  <section class="page-hero">
+    <div class="wrap">
+      <h1 class="h1-page">Frequently asked questions</h1>
+      <p class="lead">Questions families ask most about arranging an ambulance. For a specific trip, it is quicker to call.</p>
+      <ContactActions plan />
+    </div>
+  </section>
+  {faqGroups.map((g, i) => (
+    <section class:list={['section--tight', 'section--line']} aria-labelledby={`faq${i}`}>
+      <div class="wrap split">
+        <h2 id={`faq${i}`} style="font-size:clamp(1.75rem,1.4rem + 1.3vw,2.5rem)">{g.title}</h2>
+        <Faq items={g.items} />
+      </div>
+    </section>
+  ))}
+  <FinalCta />
+</Base>

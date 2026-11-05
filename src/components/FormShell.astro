@@ -1,0 +1,58 @@
+---
+// Shared wrapper: emergency note, error summary, failure panel with phone and WhatsApp
+// fallbacks, and the confirmation panel that only appears after real delivery.
+import { business, telHref, waHref } from '../data/business';
+import Icon from './Icon.astro';
+interface Props {
+  id: string;
+  type: 'booking' | 'callback' | 'contact';
+  submitLabel: string;
+  successTitle: string;
+  successNext: string;
+  whatsapp?: boolean;
+}
+const { id, type, submitLabel, successTitle, successNext, whatsapp = true } = Astro.props;
+const waBase = waHref();
+---
+<div>
+  <form id={id} class="form" action="/api/enquiry" method="post" data-enquiry={type}>
+    <p class="form-note">
+      <strong>For an emergency, do not wait for a reply here.</strong> This form is for planned requests. Call <a href={telHref}>{business.phoneDisplay}</a>.
+    </p>
+    <div class="form-summary" data-summary tabindex="-1" role="alert" hidden></div>
+    <div class="form-result form-result--fail" data-failure tabindex="-1" role="alert" hidden>
+      <h3>Your request was not sent</h3>
+      <p data-failure-text></p>
+      <p>Your details are still in the form. Please reach us directly:</p>
+      <div class="actions">
+        <a class="btn btn--call btn--small" href={telHref}><Icon name="phone" />Call {business.phoneDisplay}</a>
+        <a class="btn btn--ghost btn--wa btn--small" data-wa-fallback data-base={waBase} href={waBase} rel="noopener"><Icon name="whatsapp" />Send on WhatsApp</a>
+      </div>
+    </div>
+
+    <input type="hidden" name="formType" value={type} />
+    <input type="hidden" name="page" value="" />
+    <div class="hp" aria-hidden="true">
+      <label>Leave this empty <input type="text" name="website" tabindex="-1" autocomplete="off" /></label>
+    </div>
+
+    <slot />
+
+    <div class="form-foot">
+      <button class="btn btn--call" type="submit"><span data-label>{submitLabel}</span></button>
+      {whatsapp && <a class="btn btn--ghost btn--wa" data-wa-send data-base={waBase} href={waBase} target="_blank" rel="noopener"><Icon name="whatsapp" />Send on WhatsApp instead</a>}
+    </div>
+    <p class="form-legal">We use these details only to respond to this request. See the <a href="/privacy-policy">Privacy Policy</a>. A submitted form is a request, not a confirmed booking.</p>
+  </form>
+
+  <div class="form-result form-result--ok" data-success tabindex="-1" role="status" hidden>
+    <h3>{successTitle}</h3>
+    <p>Your reference is <strong class="num" data-ref></strong>. Keep it handy when we speak.</p>
+    <p>{successNext}</p>
+    {type === 'booking' && <p>Once the coordinator has confirmed the trip and the amount, you can <a class="link" href="/pay">pay your advance online</a>.</p>}
+    <p>If this has become urgent, call now: <a class="link" href={telHref}><strong>{business.phoneDisplay}</strong></a></p>
+  </div>
+</div>
+<script>
+  import '../scripts/forms.ts';
+</script>

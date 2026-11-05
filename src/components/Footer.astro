@@ -1,0 +1,71 @@
+---
+import { business, telHref, waHref, fullAddress } from '../data/business';
+import { routesByKm, routeHref } from '../data/routes';
+import Logo from './Logo.astro';
+const year = new Date().getFullYear();
+---
+<footer class="site-footer on-dark">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <a class="brand" href="/"><Logo />{business.name}</a>
+        <a class="foot-phone num" href={telHref}>{business.phoneDisplay}</a>
+        <p><a href={waHref('Hello, I would like to ask about an ambulance.')} rel="noopener">WhatsApp {business.phoneDisplay}</a></p>
+        <p><a href={`mailto:${business.email}`}>{business.email}</a></p>
+        <address class="foot-address">{fullAddress}<br /><a href={business.mapsUrl} rel="noopener">Open in Google Maps</a></address>
+        <p class="foot-address">Phone and WhatsApp: {business.hours}.</p>
+      </div>
+      <nav aria-labelledby="f-routes">
+        <h2 id="f-routes">Outstation routes</h2>
+        <ul class="foot-list" style="list-style:none;padding:0">
+          {routesByKm.map((r) => <li><a href={routeHref(r)}>To {r.city}</a></li>)}
+        </ul>
+      </nav>
+      <nav aria-labelledby="f-services">
+        <h2 id="f-services">Services</h2>
+        <ul style="list-style:none;padding:0">
+          <li><a href="/services/outstation-ambulance">Outstation Ambulance</a></li>
+          <li><a href="/services/icu-ambulance">ICU Ambulance</a></li>
+          <li><a href="/services/ventilator-ambulance">Ventilator Ambulance</a></li>
+          <li><a href="/services/oxygen-ambulance">Oxygen Ambulance</a></li>
+          <li><a href="/services/als-ambulance">ALS Ambulance</a></li>
+          <li><a href="/services/bls-ambulance">BLS Ambulance</a></li>
+          <li><a href="/services/hospital-transfer">Hospital Transfer</a></li>
+          <li><a href="/services/emergency-ambulance">Emergency Ambulance</a></li>
+          <li><a href="/services/dead-body-freezer-box">Freezer Box Service</a></li>
+          <li><a href="/services">All services</a></li>
+        </ul>
+      </nav>
+      <nav aria-labelledby="f-company">
+        <h2 id="f-company">Company</h2>
+        <ul style="list-style:none;padding:0">
+          <li><a href="/about">About</a></li>
+          <li><a href="/fleet">Fleet</a></li>
+          <li><a href="/safety-standards">Safety and standards</a></li>
+          <li><a href="/locations">Service locations</a></li>
+          <li><a href="/hospitals">Hospitals</a></li>
+          <li><a href="/blog">Guides</a></li>
+          <li><a href="/faq">FAQ</a></li>
+          <li><a href="/book">Plan a transfer</a></li>
+          <li><a href="/pay">Pay an advance</a></li>
+          <li><a href="/contact">Contact</a></li>
+        </ul>
+      </nav>
+      <nav aria-labelledby="f-legal">
+        <h2 id="f-legal">Legal</h2>
+        <ul style="list-style:none;padding:0">
+          <li><a href="/privacy-policy">Privacy Policy</a></li>
+          <li><a href="/terms">Terms and Conditions</a></li>
+          <li><a href="/disclaimer">Disclaimer</a></li>
+          <li><a href="/refund-policy">Refund Policy</a></li>
+          <li><a href="/cancellation-policy">Cancellation Policy</a></li>
+          <li><a href="/service-delivery-policy">Service Delivery</a></li>
+        </ul>
+      </nav>
+    </div>
+    <div class="foot-bottom">
+      <span>© {year} {business.name}. Serving Hyderabad and Secunderabad, with outstation transfers from Hyderabad.</span>
+      <span>GSTIN {business.gstin} · PAN {business.pan}</span>
+    </div>
+  </div>
+</footer>

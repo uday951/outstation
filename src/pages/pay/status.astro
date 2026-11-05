@@ -1,0 +1,68 @@
+---
+import Base from '../../layouts/Base.astro';
+import Icon from '../../components/Icon.astro';
+import { business, telHref, waHref } from '../../data/business';
+const wa = waHref('Hello, I have a question about my ambulance advance payment.');
+---
+<Base title="Payment Status | Best Ambulance Service" description="Check the status of your ambulance advance payment." noindex>
+  <section class="page-hero" style="padding-top:var(--s-7)">
+    <div class="wrap" style="max-width:48rem">
+      <h1 class="h1-page">Payment status</h1>
+      <div data-state="checking" role="status" style="margin-top:var(--s-6)">
+        <p class="lead">Checking with the payment provider…</p>
+      </div>
+      <div class="form-result form-result--ok" data-state="paid" tabindex="-1" hidden style="margin-top:var(--s-6)">
+        <h2 style="font-size:var(--t-h3);font-stretch:100%">Payment received</h2>
+        <p>We have received <strong class="num" data-amount></strong>. Your payment reference is <strong class="num" data-order></strong>.</p>
+        <p>Please keep this reference. Your coordinator will confirm the trip details with you.</p>
+      </div>
+      <div class="form-result form-result--fail" data-state="pending" tabindex="-1" hidden style="margin-top:var(--s-6)">
+        <h2 style="font-size:var(--t-h3);font-stretch:100%">Payment not confirmed yet</h2>
+        <p>We have no confirmation of this payment yet. Reference: <strong class="num" data-order></strong>.</p>
+        <p><strong>If money has left your account, please do not pay again.</strong> Call us with this reference and we will check it.</p>
+        <p><a class="link" href="/pay">Try the payment again</a> only if you did not complete it.</p>
+      </div>
+      <div class="form-result form-result--fail" data-state="failed" tabindex="-1" hidden style="margin-top:var(--s-6)">
+        <h2 style="font-size:var(--t-h3);font-stretch:100%">Payment was not completed</h2>
+        <p>This payment link has closed without a successful payment. Reference: <strong class="num" data-order></strong>.</p>
+        <p><a class="link" href="/pay">Start a new payment</a> or call us.</p>
+      </div>
+      <div class="form-result form-result--fail" data-state="unknown" tabindex="-1" hidden style="margin-top:var(--s-6)">
+        <h2 style="font-size:var(--t-h3);font-stretch:100%">We could not check this payment</h2>
+        <p>This does not mean the payment failed. <strong>Please do not pay again</strong> until you have spoken to us.</p>
+      </div>
+      <div class="actions" style="margin-top:var(--s-5)">
+        <a class="btn btn--call btn--small" href={telHref}><Icon name="phone" />Call {business.phoneDisplay}</a>
+        <a class="btn btn--ghost btn--wa btn--small" href={wa} rel="noopener"><Icon name="whatsapp" />WhatsApp us</a>
+      </div>
+    </div>
+  </section>
+</Base>
+<script>
+  const orderId = new URLSearchParams(location.search).get('order_id') ?? '';
+
+  function show(state: string, data?: { amount?: number }) {
+    document.querySelectorAll<HTMLElement>('[data-state]').forEach((el) => { el.hidden = el.dataset.state !== state; });
+    document.querySelectorAll<HTMLElement>('[data-order]').forEach((el) => { el.textContent = orderId; });
+    if (data?.amount != null) {
+      document.querySelector('[data-amount]')!.textContent = `₹${Number(data.amount).toLocaleString('en-IN')}`;
+    }
+    document.querySelector<HTMLElement>(`[data-state="${state}"]`)?.focus();
+  }
+
+  // Cashfree can take a moment to finish, so re-check a few times before saying it is unconfirmed.
+  async function check(attempt = 0): Promise<void> {
+    try {
+      const res = await fetch(`/api/payment/status?order_id=${encodeURIComponent(orderId)}`, { cache: 'no-store' });
+      const data = await res.json();
+      if (!res.ok || !data.ok) return show('unknown');
+      if (data.status === 'PAID') return show('paid', data);
+      if (data.status === 'EXPIRED' || data.status === 'TERMINATED' || data.status === 'TERMINATION_REQUESTED') return show('failed');
+      if (attempt < 3) { setTimeout(() => check(attempt + 1), 3000); return; }
+      show('pending');
+    } catch {
+      show('unknown');
+    }
+  }
+  check();
+</script>

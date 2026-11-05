@@ -1,0 +1,21 @@
+---
+import Base from '../layouts/Base.astro';
+import { business, telHref } from '../data/business';
+---
+<Base title="Request Received | Best Ambulance Service" description="Your request has reached our team." noindex>
+  <section class="page-hero">
+    <div class="wrap">
+      <h1 class="h1-page">We have your request.</h1>
+      <p class="lead">A coordinator will call the number you gave. Your trip is not booked until they have confirmed the details with you.</p>
+      <p style="margin-top:var(--s-4)" id="ref-line" hidden>Your reference is <strong class="num" id="ref"></strong>.</p>
+      <p style="margin-top:var(--s-4)">If this has become urgent, call <a class="link" href={telHref}><strong>{business.phoneDisplay}</strong></a>.</p>
+    </div>
+  </section>
+  <script is:inline>
+    const r = new URLSearchParams(location.search).get('ref');
+    if (r && /^BA-[0-9A-Z-]+$/.test(r)) {
+      document.getElementById('ref').textContent = r;
+      document.getElementById('ref-line').hidden = false;
+    }
+  </script>
+</Base>

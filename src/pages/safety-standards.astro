@@ -1,0 +1,38 @@
+---
+import Base from '../layouts/Base.astro';
+import Crumbs from '../components/Crumbs.astro';
+import FinalCta from '../components/FinalCta.astro';
+const crumbs = [{ name: 'Home', href: '/' }, { name: 'Safety and Standards', href: '/safety-standards' }];
+---
+<Base title="Ambulance Safety Standards: Checks, Crew Training & Cleaning" description="How Best Ambulance Service runs day to day: vehicle checks before each shift, crew training, cleaning between patients, and equipment matched to each trip." crumbs={crumbs}>
+  <Crumbs items={crumbs} />
+  <section class="page-hero">
+    <div class="wrap">
+      <h1 class="h1-page">How we operate, explained plainly</h1>
+      <p class="lead">This page describes how vehicles, crews and dispatch work day to day. Ask about a specific vehicle or crew qualification when you call.</p>
+    </div>
+  </section>
+  <section class="section section--line" aria-labelledby="o-h">
+    <div class="wrap">
+      <div class="section-head"><h2 id="o-h">Operational routine</h2></div>
+      <div class="grid-2">
+        <div><h3>Vehicle checks before every shift</h3><p class="muted" style="margin-top:var(--s-2)">Oxygen levels, monitoring equipment and general vehicle condition are checked before each shift begins.</p></div>
+        <div><h3>Structured crew training</h3><p class="muted" style="margin-top:var(--s-2)">Drivers and paramedics are trained in patient handling, equipment use and emergency procedure before joining a live shift.</p></div>
+        <div><h3>Equipment matched to the service</h3><p class="muted" style="margin-top:var(--s-2)">Each ambulance carries equipment suited to its purpose. A basic unit is not sent to do the work of an ICU transfer.</p></div>
+        <div><h3>Cleaning between trips</h3><p class="muted" style="margin-top:var(--s-2)">Vehicles are cleaned between patients as standard practice, not only at the end of a shift.</p></div>
+      </div>
+    </div>
+  </section>
+  <section class="section section--sand" aria-labelledby="p-h">
+    <div class="wrap">
+      <div class="section-head"><h2 id="p-h">From call to handover</h2></div>
+      <ol class="steps steps--4">
+        <li><h3>Call received</h3><p>A live coordinator takes your location and situation directly.</p></li>
+        <li><h3>Suitable unit sent</h3><p>The closest available ambulance suited to the need is sent.</p></li>
+        <li><h3>Care on arrival</h3><p>The crew begins appropriate assessment and stabilisation.</p></li>
+        <li><h3>Hospital handover</h3><p>The patient’s status is communicated to the receiving team on arrival.</p></li>
+      </ol>
+    </div>
+  </section>
+  <FinalCta />
+</Base>
