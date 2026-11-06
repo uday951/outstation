@@ -131,14 +131,14 @@ Skills used: `seo-local`, `seo-programmatic`, `seo-schema` guidance, and the `me
 ## 6. Architecture and stack
 
 - **Astro 7.4.5** with `@astrojs/node`: static pages, plus one server route, `POST /api/enquiry`
-- **Plain CSS** with design tokens, one self-hosted variable font (Archivo), no UI or animation libraries
+- **Plain CSS** with design tokens, two self-hosted variable fonts, no UI or animation libraries
 - **JavaScript:** none on route pages except a small inline menu script; about 7 KB (3 KB gzipped) on form pages
 - **Data-driven content** in `src/data/*`
 - **Node:** Astro 7 needs 22.23.4 or newer. This machine has 22.14, and it was not changed. Node is a project dev dependency instead, so `npm run` works. The host must supply its own Node 22.23.4+.
 - **Hosting:** Render web service from `render.yaml`, in Singapore, on the always-on `0.5c-512mb` plan. The free plan sleeps after 15 minutes and takes about a minute to wake, which is unsafe here. Only `bestambulance.in` is indexable; any other address gets noindex. Tested by reproducing Render's commands and variables on a clean Windows copy with Node 22.23.4. **Not yet run on Render or on Linux.**
 - **Why Astro 7:** Astro 5 was tried first for the installed Node, but `npm audit` showed serious issues, including a crash from a malformed Host header and an AVIF image RCE. `npm audit` now reports **0 vulnerabilities**.
 
-**Design system** (`src/styles/global.css`): warm paper `#f6f3ed`, charcoal `#1c1b19`, one red `#c4122f`, stone neutrals; narrowed Archivo for display in a road-sign manner; 4px spacing scale; small radii. The signature element is the route ladder, with each destination drawn to the same kilometre scale. The `ui-ux-pro-max` tool suggested cyan neumorphism and a testimonial-led layout, which conflict with your brief, so only its UX rules were used.
+**Design system** (`src/styles/global.css`): redesigned on request to match the quality of bestambulance.in, replacing the first warm-neutral look. Deep navy `#0f1b3d`, blue `#2152d9`, with red `#d42a39` kept for calling; Manrope for display and Geist for reading (both self-hosted); large radii, soft shadows, frosted header, scroll reveals that respect reduced motion. Distinctive to this site: an interactive route map plotted from real coordinates, and a route planner in the hero. Code and copy are original; the look follows the business's own brand family. Icons are Lucide (ISC licence). The logo is still a placeholder mark, so replace it with the official one.
 
 **Skills:** `ui-ux-pro-max` and `emil-design-eng` were used. No skill is named "EMLI"; `emil-design-eng` is assumed to be what you meant. `reverse-engineer-anything` (REA) is for binaries and packaged apps, so the site was inspected with a browser and an HTTP crawl instead, keeping its practice of separating what was observed from what is unknown.
 

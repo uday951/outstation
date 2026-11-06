@@ -1,135 +1,189 @@
 ---
 import Base from '../layouts/Base.astro';
-import { Picture } from 'astro:assets';
 import ContactActions from '../components/ContactActions.astro';
-import RouteLadder from '../components/RouteLadder.astro';
+import RoutePlanner from '../components/RoutePlanner.astro';
+import RouteMap from '../components/RouteMap.astro';
 import BookingForm from '../components/BookingForm.astro';
 import CompareTable from '../components/CompareTable.astro';
 import Faq from '../components/Faq.astro';
+import Icon from '../components/Icon.astro';
 import Photo from '../components/Photo.astro';
 import FinalCta from '../components/FinalCta.astro';
-import heroImg from '../assets/photos/three-ambulances-street.webp';
 import { telHref, business } from '../data/business';
+import { routesByKm, routeHref, routes } from '../data/routes';
+import { services, serviceHref } from '../data/services';
+import { serviceIcons } from '../data/icons';
 import { locationPages, locationHref, allAreas } from '../data/locations';
 import { faqGroups } from '../data/faqs';
+import { guides } from '../data/guides';
 
 const homeFaqs = [faqGroups[0].items[0], faqGroups[1].items[0], faqGroups[2].items[1], faqGroups[2].items[2], faqGroups[2].items[4]];
 const waMsg = 'Hello, I need an outstation ambulance from Hyderabad.';
 
-const decide = [
-  { q: 'Someone is seriously unwell right now', a: `Call ${business.phoneDisplay} now`, href: telHref },
-  { q: 'Stable, going home to another city after treatment', a: 'BLS ambulance', href: '/services/bls-ambulance' },
-  { q: 'Breathes alone, but needs oxygen on the way', a: 'Oxygen ambulance', href: '/services/oxygen-ambulance' },
-  { q: 'Could need a paramedic to step in during the trip', a: 'ALS ambulance', href: '/services/als-ambulance' },
-  { q: 'In an ICU, or on a ventilator', a: 'ICU or ventilator ambulance', href: '/services/icu-ambulance' },
-  { q: 'A newborn moving between hospitals', a: 'Neonatal ambulance', href: '/services/neonatal-ambulance' },
-  { q: 'Can sit up and fly or take a train with help', a: 'Medical escort', href: '/services/medical-escort' },
-  { q: 'A family member has passed away', a: 'Freezer box transport', href: '/services/dead-body-freezer-box' },
-];
+const headline = 'Outstation ambulance from Hyderabad, planned for'.split(' ');
+const accent = 'the whole distance.'.split(' ');
 
-const servicesOverview = [
-  { name: 'ICU and ventilator transfers', text: 'Intensive care on the road, within Hyderabad or to another city.', href: '/services/icu-ambulance' },
-  { name: 'Hospital-to-hospital transfers', text: 'For a higher level of care, a specialist or a second opinion.', href: '/services/hospital-transfer' },
-  { name: 'Planned patient transport', text: 'Discharges, dialysis, appointments and senior citizens.', href: '/services/patient-transport' },
-  { name: 'Rail, air and escort', text: 'Station and airport transfers, air ambulance ground legs and medical escorts.', href: '/services/medical-escort' },
-  { name: 'Emergency response in Hyderabad', text: 'Accidents, chest pain and breathing emergencies. Call, do not type.', href: '/services/emergency-ambulance' },
-  { name: 'Freezer box and mortuary', text: 'Dignified transport and storage, including journeys to a native place.', href: '/services/dead-body-freezer-box' },
+const decide = [
+  { q: 'Someone is seriously unwell right now', a: `Call ${business.phoneDisplay} now`, href: telHref, icon: 'siren', urgent: true },
+  { q: 'Stable, going home to another city', a: 'BLS ambulance', href: '/services/bls-ambulance', icon: 'cross' },
+  { q: 'Breathes alone, but needs oxygen', a: 'Oxygen ambulance', href: '/services/oxygen-ambulance', icon: 'wind' },
+  { q: 'A paramedic may need to step in', a: 'ALS ambulance', href: '/services/als-ambulance', icon: 'syringe' },
+  { q: 'In an ICU, or on a ventilator', a: 'ICU or ventilator ambulance', href: '/services/icu-ambulance', icon: 'activity' },
+  { q: 'A newborn moving between hospitals', a: 'Neonatal ambulance', href: '/services/neonatal-ambulance', icon: 'baby' },
+  { q: 'Can fly or take a train with help', a: 'Medical escort', href: '/services/medical-escort', icon: 'userCheck' },
+  { q: 'A family member has passed away', a: 'Freezer box transport', href: '/services/dead-body-freezer-box', icon: 'snowflake' },
+] as const;
+
+const featured = ['ventilator-ambulance', 'oxygen-ambulance', 'hospital-transfer', 'patient-transport', 'medical-escort', 'dead-body-freezer-box', 'emergency-ambulance'];
+const featuredCards = featured.map((slug) => services.find((s) => s.slug === slug)!);
+const icu = services.find((s) => s.slug === 'icu-ambulance')!;
+
+const steps = [
+  ['Tell us the trip', 'Call, WhatsApp or send the form with the pickup, the destination and the patient’s condition.'],
+  ['We confirm the plan', 'A coordinator confirms the vehicle, crew, route, journey time and cost with you before dispatch.'],
+  ['On the road', 'The crew stays with the patient, with rest stops planned around their needs on longer journeys.'],
+  ['Handover on arrival', 'The patient is handed to the receiving hospital or settled at home, with a status update.'],
 ];
 ---
 <Base
   title="Outstation Ambulance Service from Hyderabad | ICU & Oxygen Transfers"
-  description="Long-distance ambulance transfers from Hyderabad to Bengaluru, Chennai, Vijayawada and beyond. ICU, ventilator and oxygen ambulances, arranged by phone 24×7."
+  description="Long-distance ambulance transfers from Hyderabad to Bangalore, Chennai, Vijayawada and beyond. ICU, ventilator and oxygen ambulances, arranged by phone 24×7."
   waMessage={waMsg}
 >
   <section class="hero">
     <div class="wrap hero-grid">
       <div>
-        <p class="eyebrow">Best Ambulance Service, Hyderabad</p>
-        <h1 style="margin-top:var(--s-4)">Outstation ambulance from Hyderabad, planned for <em>the whole distance.</em></h1>
+        <p class="status-pill"><i aria-hidden="true"></i>Dispatch open 24×7 from Hyderabad</p>
+        <h1>
+          {headline.map((w, i) => <><span class="w"><span style={`--i:${i}`}>{w}</span></span>{' '}</>)}
+          <em>{accent.map((w, i) => <><span class="w"><span style={`--i:${i + headline.length}`}>{w}</span></span>{' '}</>)}</em>
+        </h1>
         <p class="lead">ICU, ventilator, oxygen and basic ambulances for long-distance patient transfers. Vehicle, crew, route and cost are confirmed with you before the trip is booked.</p>
         <ContactActions plan planHref="#request" waMessage={waMsg} />
+        <ul class="hero-points">
+          <li><Icon name="phone" />A coordinator answers directly</li>
+          <li><Icon name="shieldCheck" />Vehicle matched to the patient</li>
+          <li><Icon name="route" />Stops planned for the distance</li>
+        </ul>
       </div>
-      <figure class="hero-photo">
-        <Picture src={heroImg} formats={['avif', 'webp']} fallbackFormat="jpg" widths={[480, 800, 1200]} sizes="(min-width: 1040px) 40vw, 100vw" alt="Three white Best Ambulance Service vehicles, including a large Force Traveller ambulance, parked on a Hyderabad street" loading="eager" fetchpriority="high" />
-      </figure>
+      <div class="planner">
+        <Photo name="street" class="planner-photo" eager sizes="(min-width: 1040px) 42vw, 100vw" alt="Three white Best Ambulance Service vehicles, including a large Force Traveller ambulance, parked on a Hyderabad street" />
+        <RoutePlanner />
+      </div>
     </div>
   </section>
 
-  <section class="section" aria-labelledby="routes-h">
+  <section class="section--tight" aria-label="At a glance" style="padding-top:0">
+    <div class="wrap stats">
+      <div class="stat reveal"><strong>24×7</strong><span>Phone and WhatsApp dispatch</span></div>
+      <div class="stat reveal" style="--i:1"><strong class="num">{routes.length}</strong><span>Outstation routes mapped</span></div>
+      <div class="stat reveal" style="--i:2"><strong class="num">{allAreas.length}</strong><span>Hyderabad localities listed</span></div>
+      <div class="stat reveal" style="--i:3"><strong class="num">{services.length + 1}</strong><span>Ambulance services</span></div>
+    </div>
+  </section>
+
+  <section class="section section--ink on-dark" aria-labelledby="routes-h">
+    <div class="wrap map-layout">
+      <div>
+        <div class="reveal">
+          <p class="eyebrow">Outstation routes</p>
+          <h2 id="routes-h" style="margin-top:var(--s-3)">From Hyderabad to wherever care or home is.</h2>
+          <p class="lead" style="margin-top:var(--s-4)">Frequently requested routes are planned in detail. Other destinations in India are confirmed case by case.</p>
+        </div>
+        <ul class="map-list">
+          {routesByKm.map((r) => (
+            <li><a href={routeHref(r)} data-route-link={r.slug}><b>{r.city}</b><span class="num">{r.kmLabel}</span></a></li>
+          ))}
+        </ul>
+      </div>
+      <div class="reveal"><RouteMap /></div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="services-h">
     <div class="wrap">
-      <div class="section-head">
-        <h2 id="routes-h">How far is the patient going?</h2>
-        <p class="lead">Frequently requested routes from Hyderabad. Other destinations in India are confirmed case by case.</p>
+      <div class="section-head reveal">
+        <p class="eyebrow">What we run</p>
+        <h2 id="services-h">An ambulance for every kind of journey</h2>
       </div>
-      <RouteLadder />
-      <p class="small muted" style="margin-top:var(--s-4)">Distances and times are planning estimates. They vary with traffic, stops and the patient’s condition.</p>
+      <div class="cards">
+        <a class="card card--feature reveal" href={serviceHref(icu.slug)}>
+          <Photo name="interiorNight" alt="Inside a mobile ICU ambulance: stretcher, attendant seating, equipment cabinets and blue flooring" sizes="(min-width: 1040px) 66vw, 100vw" />
+          <span class="tile"><Icon name={serviceIcons[icu.slug]} /></span>
+          <h3>{icu.name}</h3>
+          <p>{icu.short}</p>
+          <span class="go">Learn more <Icon name="arrowUpRight" /></span>
+        </a>
+        {featuredCards.map((s, i) => (
+          <a class="card reveal" style={`--i:${(i % 3) + 1}`} href={serviceHref(s.slug)}>
+            <span class="tile"><Icon name={serviceIcons[s.slug]} /></span>
+            <h3>{s.name}</h3>
+            <p>{s.short}</p>
+            <span class="go">Learn more <Icon name="arrowUpRight" /></span>
+          </a>
+        ))}
+      </div>
+      <p style="margin-top:var(--s-6)"><a class="btn btn--ghost" href="/services">See all ambulance services</a></p>
     </div>
   </section>
 
-  <section class="section section--ink on-dark" aria-labelledby="decide-h">
+  <section class="section section--line" aria-labelledby="decide-h">
     <div class="wrap split">
-      <div class="section-head" style="margin-bottom:0">
-        <h2 id="decide-h">Which ambulance does the patient need?</h2>
+      <div class="section-head sticky-side reveal" style="margin-bottom:0">
+        <p class="eyebrow">Not sure what you need?</p>
+        <h2 id="decide-h">Find the right ambulance</h2>
         <p class="lead">Start with what is true right now. The treating doctor and our coordinator will confirm the final choice with you.</p>
       </div>
-      <nav class="decide" aria-labelledby="decide-h">
-        {decide.map((d) => <a href={d.href}><span class="q">{d.q}</span><span class="a">{d.a}</span></a>)}
+      <nav class="decide-panel reveal" aria-labelledby="decide-h">
+        {decide.map((d) => (
+          <a href={d.href} class={'urgent' in d ? 'urgent' : ''}>
+            <span class="tile"><Icon name={d.icon} /></span>
+            <span><b>{d.q}</b><small>{d.a}</small></span>
+          </a>
+        ))}
       </nav>
-    </div>
-  </section>
-
-  <section class="section" aria-labelledby="compare-h">
-    <div class="wrap">
-      <div class="section-head">
-        <h2 id="compare-h">BLS, oxygen, ALS or ICU, side by side</h2>
-      </div>
-      <CompareTable />
-      <p style="margin-top:var(--s-5)"><a class="link" href="/blog/choosing-the-right-ambulance-for-long-distance">How to choose the right ambulance for a long-distance transfer</a></p>
     </div>
   </section>
 
   <section class="section section--sand" aria-labelledby="process-h">
     <div class="wrap">
-      <div class="section-head"><h2 id="process-h">How a long-distance transfer is arranged</h2></div>
-      <ol class="steps steps--4">
-        <li><h3>Tell us the trip</h3><p>Call, WhatsApp or send the form with the pickup, the destination and the patient’s condition.</p></li>
-        <li><h3>Confirm the plan</h3><p>A coordinator confirms the vehicle, crew, route, journey time and cost with you before dispatch.</p></li>
-        <li><h3>On the road</h3><p>The crew stays with the patient, with rest stops planned around their needs on longer journeys.</p></li>
-        <li><h3>Handover</h3><p>The patient is handed to the receiving hospital or settled at home, with a status update.</p></li>
+      <div class="section-head reveal">
+        <p class="eyebrow">How it works</p>
+        <h2 id="process-h">From your call to safe arrival</h2>
+      </div>
+      <ol class="timeline">
+        {steps.map(([t, p], i) => (
+          <li class="reveal">
+            <span class="dot" aria-hidden="true">0{i + 1}</span>
+            <h3>{t}</h3>
+            <p>{p}</p>
+          </li>
+        ))}
       </ol>
     </div>
   </section>
 
   <section class="section" id="request" aria-labelledby="request-h">
     <div class="wrap split">
-      <div class="sticky-side">
-        <h2 id="request-h">Planning a transfer? Send us the details.</h2>
+      <div class="sticky-side reveal">
+        <p class="eyebrow">Plan a transfer</p>
+        <h2 id="request-h" style="margin-top:var(--s-3)">Send us the details</h2>
         <p class="lead" style="margin-top:var(--s-4)">A coordinator will call you back to confirm what is possible and what it costs. Sending this form is a request and does not book the trip.</p>
+        <ul class="ticks" style="margin-top:var(--s-6)">
+          <li>Takes about two minutes</li>
+          <li>You hear the cost before anything is booked</li>
+          <li>Prefer to talk? <a class="link" href={telHref}>Call {business.phoneDisplay}</a></li>
+        </ul>
       </div>
-      <BookingForm id="home-request" />
-    </div>
-  </section>
-
-  <section class="section section--line" aria-labelledby="services-h">
-    <div class="wrap">
-      <div class="section-head"><h2 id="services-h">More than the highway</h2></div>
-      <div class="rows">
-        {servicesOverview.map((s) => (
-          <a class="row-link" href={s.href}>
-            <h3>{s.name}</h3>
-            <p>{s.text}</p>
-            <span class="go" aria-hidden="true">View service</span>
-          </a>
-        ))}
-      </div>
-      <p style="margin-top:var(--s-5)"><a class="link" href="/services">See all ambulance services</a></p>
+      <div class="reveal"><BookingForm id="home-request" /></div>
     </div>
   </section>
 
   <section class="section section--sand" aria-labelledby="why-h">
     <div class="wrap split split--even">
-      <div>
-        <h2 id="why-h">What you can expect from us</h2>
+      <div class="reveal">
+        <p class="eyebrow">Why families choose us</p>
+        <h2 id="why-h" style="margin-top:var(--s-3)">Built around getting the patient there safely</h2>
         <ul class="ticks" style="margin-top:var(--s-6)">
           <li><strong>A person answers.</strong> A coordinator takes your call directly, at any hour, with no automated menu.</li>
           <li><strong>The vehicle fits the patient.</strong> The ambulance and equipment are matched to the case, not just whatever is closest.</li>
@@ -139,48 +193,79 @@ const servicesOverview = [
         </ul>
         <p style="margin-top:var(--s-5)"><a class="link" href="/safety-standards">How our safety routine works</a></p>
       </div>
-      <Photo name="dropoff" alt="Mobile ICU ambulance and a second ambulance parked outside a multi-storey hospital building in Hyderabad" />
-    </div>
-  </section>
-
-  <section class="section" aria-labelledby="equip-h">
-    <div class="wrap split split--even">
-      <Photo name="interiorNight" alt="Inside a mobile ICU ambulance: stretcher, attendant seating, equipment cabinets and blue flooring" class="photo tall" sizes="(min-width: 1040px) 40vw, 100vw" />
-      <div>
-        <h2 id="equip-h">Equipment and patient care</h2>
-        <p class="lead" style="margin-top:var(--s-4)">Each ambulance carries what its role requires. Tell the coordinator what the doctor has advised, and they will confirm what is on board for your trip.</p>
-        <ul class="ticks" style="margin-top:var(--s-6)">
-          <li>Oxygen cylinders with masks, and backup supply</li>
-          <li>Cardiac monitor and defibrillator on ALS and ICU units</li>
-          <li>Portable ventilator with battery backup</li>
-          <li>Infusion and syringe pumps for ICU-level transfers</li>
-          <li>Suction unit for airway management</li>
-          <li>Spinal board and immobilisation equipment</li>
-          <li>Stretcher and mobility support</li>
-          <li>Infant transport incubator for neonatal transfers</li>
-        </ul>
-        <p style="margin-top:var(--s-5)"><a class="link" href="/fleet">See the fleet</a></p>
+      <div class="photo-wrap reveal">
+        <Photo name="dropoff" alt="Mobile ICU ambulance and a second ambulance parked outside a multi-storey hospital building in Hyderabad" sizes="(min-width: 1040px) 50vw, 100vw" />
+        <span class="float-chip" style="left:1rem;bottom:1rem"><Icon name="activity" />Mobile ICU</span>
       </div>
     </div>
   </section>
 
-  <section class="section section--sand" aria-labelledby="coverage-h">
+  <section class="section" aria-labelledby="compare-h">
     <div class="wrap">
-      <div class="section-head">
-        <h2 id="coverage-h">Where trips begin</h2>
-        <p class="lead">Based in LB Nagar, covering Hyderabad and Secunderabad. The business lists {allAreas.length} localities, and outstation trips can start from any of them.</p>
+      <div class="section-head reveal">
+        <p class="eyebrow">Compare</p>
+        <h2 id="compare-h">BLS, oxygen, ALS or ICU, side by side</h2>
       </div>
-      <ul class="tag-list">
+      <div class="reveal"><CompareTable /></div>
+      <p style="margin-top:var(--s-5)"><a class="link" href="/blog/choosing-the-right-ambulance-for-long-distance">How to choose the right ambulance for a long-distance transfer</a></p>
+    </div>
+  </section>
+
+  <section class="section section--sand" aria-labelledby="fleet-h">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <p class="eyebrow">Our fleet</p>
+        <h2 id="fleet-h">Real ambulances, out on the road</h2>
+      </div>
+      <div class="fleet-strip reveal">
+        <Photo name="pair" alt="A large Advanced Life Support ambulance beside a smaller ambulance under a shed" sizes="(min-width: 720px) 50vw, 100vw" />
+        <Photo name="interiorDay" alt="Inside a smaller ambulance, with a padded stretcher, attendant seat and monitor" sizes="(min-width: 720px) 25vw, 100vw" />
+        <Photo name="lineup" alt="Two ambulances parked outside the Best Ambulance Service office" sizes="(min-width: 720px) 25vw, 100vw" />
+      </div>
+      <p style="margin-top:var(--s-6)"><a class="btn btn--ghost" href="/fleet">See the full fleet</a></p>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="coverage-h">
+    <div class="wrap split">
+      <div class="reveal">
+        <p class="eyebrow">Where trips begin</p>
+        <h2 id="coverage-h" style="margin-top:var(--s-3)">Across Hyderabad and Secunderabad</h2>
+        <p class="lead" style="margin-top:var(--s-4)">Based in LB Nagar. The business lists {allAreas.length} localities, and outstation trips can start from any of them.</p>
+      </div>
+      <ul class="tag-list reveal" style="align-content:center">
         {locationPages.map((l) => <li><a href={locationHref(l.slug)}>{l.name}</a></li>)}
         <li><a href="/locations">All service locations</a></li>
       </ul>
     </div>
   </section>
 
+  <section class="section section--sand" aria-labelledby="guides-h">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <p class="eyebrow">Guides for families</p>
+        <h2 id="guides-h">Plain answers for an unfamiliar situation</h2>
+      </div>
+      <div class="cards">
+        {guides.slice(0, 3).map((g, i) => (
+          <a class="card reveal" style={`--i:${i}`} href={`/blog/${g.slug}`}>
+            <span class="tile"><Icon name="fileText" /></span>
+            <h3>{g.title}</h3>
+            <p>{g.summary}</p>
+            <span class="go">Read guide <Icon name="arrowUpRight" /></span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
   <section class="section" aria-labelledby="faq-h">
     <div class="wrap split">
-      <h2 id="faq-h">Common questions</h2>
-      <div>
+      <div class="reveal">
+        <p class="eyebrow">Common questions</p>
+        <h2 id="faq-h" style="margin-top:var(--s-3)">Frequently asked</h2>
+      </div>
+      <div class="reveal">
         <Faq items={homeFaqs} />
         <p style="margin-top:var(--s-5)"><a class="link" href="/faq">Read all FAQs</a></p>
       </div>

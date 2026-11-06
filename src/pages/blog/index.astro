@@ -2,6 +2,7 @@
 import Base from '../../layouts/Base.astro';
 import Crumbs from '../../components/Crumbs.astro';
 import FinalCta from '../../components/FinalCta.astro';
+import Icon from '../../components/Icon.astro';
 import { guides } from '../../data/guides';
 const crumbs = [{ name: 'Home', href: '/' }, { name: 'Guides', href: '/blog' }];
 ---
@@ -15,12 +16,13 @@ const crumbs = [{ name: 'Home', href: '/' }, { name: 'Guides', href: '/blog' }];
   </section>
   <section class="section--tight">
     <div class="wrap">
-      <div class="rows">
-        {guides.map((g) => (
-          <a class="row-link" href={`/blog/${g.slug}`}>
-            <h2 style="font-size:var(--t-h3);font-stretch:100%;font-weight:650;letter-spacing:-0.005em;line-height:1.2">{g.title}</h2>
+      <div class="cards">
+        {guides.map((g, i) => (
+          <a class="card reveal" style={`--i:${i % 3}`} href={`/blog/${g.slug}`}>
+            <span class="tile"><Icon name="fileText" /></span>
+            <h2 style="font-size:var(--t-h3);letter-spacing:-0.016em;font-weight:700;line-height:1.25">{g.title}</h2>
             <p>{g.summary}</p>
-            <span class="go" aria-hidden="true">Read guide</span>
+            <span class="go">Read guide <Icon name="arrowUpRight" /></span>
           </a>
         ))}
       </div>

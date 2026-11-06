@@ -17,6 +17,6 @@ const widths = [480, 800, 1200].filter((w) => w < src.width);
 widths.push(Math.min(src.width, 1600));
 ---
 <figure class={cls}>
-  <Picture src={src} formats={['avif', 'webp']} fallbackFormat="jpg" widths={widths} sizes={sizes} alt={alt} loading={eager ? 'eager' : 'lazy'} decoding="async" />
+  <Picture src={src} formats={['avif', 'webp']} fallbackFormat="jpg" widths={widths} sizes={sizes} alt={alt} loading={eager ? 'eager' : 'lazy'} fetchpriority={eager ? 'high' : undefined} decoding={eager ? 'sync' : 'async'} />
   {caption && <figcaption>{caption}</figcaption>}
 </figure>

@@ -3,17 +3,18 @@ import { business, telHref } from '../data/business';
 import Icon from './Icon.astro';
 import Logo from './Logo.astro';
 import { routesByKm, routeHref } from '../data/routes';
+import { serviceIcons } from '../data/icons';
 
 const path = Astro.url.pathname.replace(/\.html$/, '');
 const current = (href: string) => (path === href ? 'page' : undefined);
 const topRoutes = routesByKm.filter((r) => ['Bangalore', 'Chennai', 'Vijayawada', 'Visakhapatnam', 'Mumbai', 'Delhi'].includes(r.city));
 const services = [
-  ['ICU Ambulance', '/services/icu-ambulance'],
-  ['Ventilator Ambulance', '/services/ventilator-ambulance'],
-  ['Oxygen Ambulance', '/services/oxygen-ambulance'],
-  ['Hospital Transfer', '/services/hospital-transfer'],
-  ['Patient Transport', '/services/patient-transport'],
-  ['Freezer Box Service', '/services/dead-body-freezer-box'],
+  ['ICU Ambulance', 'icu-ambulance'],
+  ['Ventilator Ambulance', 'ventilator-ambulance'],
+  ['Oxygen Ambulance', 'oxygen-ambulance'],
+  ['Hospital Transfer', 'hospital-transfer'],
+  ['Patient Transport', 'patient-transport'],
+  ['Freezer Box Service', 'dead-body-freezer-box'],
 ];
 ---
 <aside class="alert-bar on-dark" aria-label="Emergency contact">
@@ -30,19 +31,19 @@ const services = [
       <ul>
         <li>
           <details class="nav-menu">
-            <summary>Outstation routes</summary>
+            <summary>Outstation routes <Icon name="chevronDown" /></summary>
             <div class="menu">
               <a class="menu-title" href="/services/outstation-ambulance">All outstation transfers from Hyderabad</a>
-              {topRoutes.map((r) => <a href={routeHref(r)}>Hyderabad to {r.city}</a>)}
+              {topRoutes.map((r) => <a href={routeHref(r)}><Icon name="route" />Hyderabad to {r.city}</a>)}
             </div>
           </details>
         </li>
         <li>
           <details class="nav-menu">
-            <summary>Services</summary>
+            <summary>Services <Icon name="chevronDown" /></summary>
             <div class="menu">
               <a class="menu-title" href="/services">All ambulance services</a>
-              {services.map(([n, h]) => <a href={h}>{n}</a>)}
+              {services.map(([n, s]) => <a href={`/services/${s}`}><Icon name={serviceIcons[s]} />{n}</a>)}
             </div>
           </details>
         </li>

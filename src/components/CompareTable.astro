@@ -1,3 +1,13 @@
+---
+import Icon from './Icon.astro';
+const rows: [string, boolean, boolean, boolean, boolean][] = [
+  ['Trained attendant or paramedic', true, true, true, true],
+  ['Oxygen support', true, true, true, true],
+  ['Cardiac monitor', false, false, true, true],
+  ['Ventilator', false, false, false, true],
+  ['Advanced medication or intervention', false, false, true, true],
+];
+---
 <div class="table-wrap" tabindex="0" role="region" aria-label="Comparison of ambulance types">
   <table class="compare">
     <caption class="sr-only">What each ambulance type carries and when it fits</caption>
@@ -5,11 +15,17 @@
       <tr><th scope="col">Feature</th><th scope="col">BLS</th><th scope="col">Oxygen</th><th scope="col">ALS</th><th scope="col">ICU</th></tr>
     </thead>
     <tbody>
-      <tr><th scope="row">Trained attendant or paramedic</th><td>Yes</td><td>Yes</td><td>Yes</td><td>Yes</td></tr>
-      <tr><th scope="row">Oxygen support</th><td>Yes</td><td>Yes</td><td>Yes</td><td>Yes</td></tr>
-      <tr><th scope="row">Cardiac monitor</th><td>No</td><td>No</td><td>Yes</td><td>Yes</td></tr>
-      <tr><th scope="row">Ventilator</th><td>No</td><td>No</td><td>No</td><td>Yes</td></tr>
-      <tr><th scope="row">Advanced medication or intervention</th><td>No</td><td>No</td><td>Yes</td><td>Yes</td></tr>
+      {rows.map(([label, ...cells]) => (
+        <tr>
+          <th scope="row">{label}</th>
+          {cells.map((on) => (
+            <td>
+              <span class={on ? 'yes' : 'no'}><Icon name={on ? 'check' : 'x'} /></span>
+              <span class="sr-only">{on ? 'Yes' : 'No'}</span>
+            </td>
+          ))}
+        </tr>
+      ))}
       <tr><th scope="row">Best for</th><td>Stable patients and planned transport</td><td>Breathing difficulty, not on a ventilator</td><td>Patients who may need active intervention</td><td>Critical transfers and ventilated patients</td></tr>
     </tbody>
   </table>

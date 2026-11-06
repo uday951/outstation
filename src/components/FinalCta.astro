@@ -1,5 +1,6 @@
 ---
 import ContactActions from './ContactActions.astro';
+import Photo from './Photo.astro';
 import { business } from '../data/business';
 interface Props { title?: string; text?: string; waMessage?: string; planHref?: string; }
 const {
@@ -9,12 +10,15 @@ const {
   planHref = '/book',
 } = Astro.props;
 ---
-<section class="section section--ink on-dark final-cta">
-  <div class="wrap final-grid">
-    <h2>{title}</h2>
-    <div>
-      <p class="lead">{text}</p>
-      <ContactActions plan planHref={planHref} waMessage={waMessage} />
+<section class="final-cta on-dark">
+  <div class="wrap">
+    <div class="final-grid reveal">
+      <Photo name="pair" alt="" class="final-photo" sizes="40vw" />
+      <div class="final-copy">
+        <h2>{title}</h2>
+        <p class="lead" style="margin-top:var(--s-4)">{text}</p>
+        <ContactActions plan planHref={planHref} waMessage={waMessage} />
+      </div>
     </div>
   </div>
 </section>

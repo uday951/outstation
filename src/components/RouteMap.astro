@@ -1,0 +1,99 @@
+---
+// Outstation routes plotted from real coordinates, as a schematic with no country outline.
+// Hover or focus on a route highlights it. `active` marks one route for a route page.
+import { routes, routeHref } from '../data/routes';
+
+interface Props { active?: string; readout?: boolean; }
+const { active, readout = true } = Astro.props;
+
+const coords: Record<string, [number, number, 'l' | 'r', number?]> = {
+  // lng, lat, label side, label vertical offset
+  'hyderabad-to-warangal': [79.59, 17.97, 'r', -6],
+  'hyderabad-to-khammam': [80.15, 17.25, 'r', -1],
+  'hyderabad-to-vijayawada': [80.65, 16.51, 'r', -3],
+  'hyderabad-to-guntur': [80.44, 16.31, 'r', 12],
+  'hyderabad-to-nellore': [79.99, 14.44, 'r', 0],
+  'hyderabad-to-tirupati': [79.42, 13.63, 'l', -2],
+  'hyderabad-to-chennai': [80.27, 13.08, 'r', 4],
+  'hyderabad-to-bangalore': [77.59, 12.97, 'l', 4],
+  'hyderabad-to-visakhapatnam': [83.22, 17.69, 'l', -7],
+  'hyderabad-to-mumbai': [72.88, 19.08, 'r', -11],
+  'hyderabad-to-delhi': [77.21, 28.61, 'r', 4],
+};
+const K = 34;
+const X0 = 71.2;
+const Y0 = 29.6;
+const px = (lng: number, lat: number) => [Math.round((lng - X0) * K + 12), Math.round((Y0 - lat) * K + 12)];
+const [hx, hy] = px(78.49, 17.39);
+const width = 480;
+const height = 610;
+
+const items = routes.map((r, i) => {
+  const [lng, lat, side, dy = 0] = coords[r.slug];
+  const [x, y] = px(lng, lat);
+  // Bow each line slightly so that routes fanning out from one point stay readable.
+  const mx = (hx + x) / 2;
+  const my = (hy + y) / 2;
+  const dx = x - hx;
+  const dyy = y - hy;
+  const bow = 0.14;
+  const cx = Math.round(mx - dyy * bow);
+  const cy = Math.round(my + dx * bow);
+  return { r, i, x, y, side, dy, path: `M${hx} ${hy}Q${cx} ${cy} ${x} ${y}` };
+});
+const first = routes.find((r) => r.slug === (active ?? 'hyderabad-to-bangalore'))!;
+---
+<div class="map-card" data-route-map data-interactive={active ? undefined : 'true'}>
+  <svg class="route-map" viewBox={`0 0 ${width} ${height}`} role="img" aria-label={active ? `Map line from Hyderabad to ${first.city}` : 'Schematic map of outstation ambulance routes from Hyderabad'}>
+    {items.map(({ r, i, x, y, side, dy, path }) => (
+      <g data-slug={r.slug} data-city={r.city} data-km={r.kmLabel} data-hours={r.hours} data-href={routeHref(r)} class={r.slug === active ? 'on' : ''} style={`--i:${i}`}>
+        <path class="arc" d={path} pathLength="1" />
+        <circle class="node" cx={x} cy={y} r="4" />
+        <circle class="hit" cx={x} cy={y} r="17" />
+        <text x={side === 'l' ? x - 10 : x + 10} y={y + 4 + dy} text-anchor={side === 'l' ? 'end' : 'start'}>{r.city === 'Visakhapatnam' ? 'Vizag' : r.city}</text>
+      </g>
+    ))}
+    <circle class="hub-ring" cx={hx} cy={hy} r="9" />
+    <circle class="hub" cx={hx} cy={hy} r="6" />
+    <text class="hub-label" x={hx - 12} y={hy - 9} text-anchor="end">Hyderabad</text>
+  </svg>
+  {readout && (
+    <div class="map-readout" aria-live="polite">
+      <div>
+        <strong data-readout-city>Hyderabad to {first.city}</strong><br />
+        <span class="num" data-readout-meta>{first.kmLabel} · {first.hours}</span>
+      </div>
+      {!active && <a href={routeHref(first)} data-readout-link>View route</a>}
+    </div>
+  )}
+</div>
+<script>
+  document.querySelectorAll<HTMLElement>('[data-route-map][data-interactive]').forEach((card) => {
+    const section = card.closest('section') ?? card;
+    const groups = [...card.querySelectorAll<SVGGElement>('g[data-slug]')];
+    const links = [...section.querySelectorAll<HTMLAnchorElement>('[data-route-link]')];
+    const city = card.querySelector('[data-readout-city]');
+    const meta = card.querySelector('[data-readout-meta]');
+    const link = card.querySelector<HTMLAnchorElement>('[data-readout-link]');
+
+    const select = (slug: string) => {
+      const g = groups.find((x) => x.dataset.slug === slug);
+      if (!g) return;
+      groups.forEach((x) => x.classList.toggle('on', x === g));
+      links.forEach((a) => a.classList.toggle('on', a.dataset.routeLink === slug));
+      if (city) city.textContent = `Hyderabad to ${g.dataset.city}`;
+      if (meta) meta.textContent = `${g.dataset.km} · ${g.dataset.hours}`;
+      if (link) link.href = g.dataset.href!;
+    };
+
+    groups.forEach((g) => {
+      g.addEventListener('pointerenter', () => select(g.dataset.slug!));
+      g.addEventListener('click', () => select(g.dataset.slug!));
+    });
+    links.forEach((a) => {
+      a.addEventListener('pointerenter', () => select(a.dataset.routeLink!));
+      a.addEventListener('focus', () => select(a.dataset.routeLink!));
+    });
+    select('hyderabad-to-bangalore');
+  });
+</script>

@@ -3,6 +3,7 @@ import Base from '../../../layouts/Base.astro';
 import Crumbs from '../../../components/Crumbs.astro';
 import ContactActions from '../../../components/ContactActions.astro';
 import RouteLadder from '../../../components/RouteLadder.astro';
+import RouteMap from '../../../components/RouteMap.astro';
 import Faq from '../../../components/Faq.astro';
 import FinalCta from '../../../components/FinalCta.astro';
 import { service } from '../../../lib/schema';
@@ -34,11 +35,14 @@ const planHref = `/book?to=${encodeURIComponent(r.city)}`;
 >
   <Crumbs items={crumbs} />
   <section class="page-hero">
-    <div class="wrap">
-      <p class="eyebrow">Outstation route</p>
-      <h1 class="h1-page" style="margin-top:var(--s-3)">Hyderabad to {r.city} ambulance</h1>
-      <p class="lead">{r.lead}</p>
-      <ContactActions plan planHref={planHref} waMessage={wa} />
+    <div class="wrap hero-grid">
+      <div>
+        <p class="eyebrow">Outstation route</p>
+        <h1 class="h1-page" style="margin-top:var(--s-3)">Hyderabad to {r.city} ambulance</h1>
+        <p class="lead">{r.lead}</p>
+        <ContactActions plan planHref={planHref} waMessage={wa} />
+      </div>
+      <div class="on-dark" style="max-width:30rem;width:100%;justify-self:end"><RouteMap active={r.slug} /></div>
     </div>
   </section>
 

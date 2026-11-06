@@ -1,0 +1,38 @@
+---
+// Quick distance and time lookup on the home page. Without JavaScript the default route still links correctly.
+import { routesByKm, routeHref, routeWhatsApp } from '../data/routes';
+import { waHref } from '../data/business';
+import Icon from './Icon.astro';
+
+const start = routesByKm.find((r) => r.slug === 'hyderabad-to-bangalore')!;
+---
+<div class="planner-card" data-planner>
+  <label for="planner-to">Where is the patient going?</label>
+  <select id="planner-to">
+    {routesByKm.map((r) => (
+      <option value={r.slug} selected={r.slug === start.slug} data-km={r.kmLabel} data-hours={r.hours} data-href={routeHref(r)} data-wa={waHref(routeWhatsApp(r))}>
+        Hyderabad to {r.city}
+      </option>
+    ))}
+  </select>
+  <dl class="planner-stats" aria-live="polite">
+    <div><dt>Distance</dt><dd class="num" data-km>{start.kmLabel}</dd></div>
+    <div><dt>Typical journey</dt><dd class="num" data-hours>{start.hours}</dd></div>
+  </dl>
+  <div class="planner-go">
+    <a class="btn btn--blue btn--small" href={routeHref(start)} data-href>View route</a>
+    <a class="btn btn--ghost btn--wa btn--small" href={waHref(routeWhatsApp(start))} data-wa rel="noopener"><Icon name="whatsapp" />Ask</a>
+  </div>
+</div>
+<script>
+  document.querySelectorAll<HTMLElement>('[data-planner]').forEach((p) => {
+    const select = p.querySelector('select')!;
+    select.addEventListener('change', () => {
+      const o = select.selectedOptions[0];
+      p.querySelector('[data-km]')!.textContent = o.dataset.km!;
+      p.querySelector('[data-hours]')!.textContent = o.dataset.hours!;
+      p.querySelector<HTMLAnchorElement>('a[data-href]')!.href = o.dataset.href!;
+      p.querySelector<HTMLAnchorElement>('a[data-wa]')!.href = o.dataset.wa!;
+    });
+  });
+</script>

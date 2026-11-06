@@ -6,7 +6,9 @@ import Faq from '../../components/Faq.astro';
 import Photo from '../../components/Photo.astro';
 import FinalCta from '../../components/FinalCta.astro';
 import { service } from '../../lib/schema';
+import Icon from '../../components/Icon.astro';
 import { services, serviceHref, serviceName, type Service } from '../../data/services';
+import { serviceIcons } from '../../data/icons';
 
 export function getStaticPaths() {
   return services.map((s) => ({ params: { slug: s.slug }, props: { s } }));
@@ -29,8 +31,8 @@ const planHref = s.bookType ? `/book?type=${encodeURIComponent(s.bookType)}` : '
   <section class="page-hero">
     <div class:list={['wrap', { 'hero-grid': s.photo }]}>
       <div>
-        <p class="eyebrow">{s.group}</p>
-        <h1 class="h1-page" style="margin-top:var(--s-3)">{s.name}</h1>
+        <div class="title-row"><span class="tile"><Icon name={serviceIcons[s.slug]} /></span><p class="eyebrow">{s.group}</p></div>
+        <h1 class="h1-page" style="margin-top:var(--s-4)">{s.name}</h1>
         <p class="lead">{s.lead}</p>
         <ContactActions plan={!s.emergency} planHref={planHref} waMessage={wa} />
       </div>

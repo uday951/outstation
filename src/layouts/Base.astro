@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
-import fontUrl from '@fontsource-variable/archivo/files/archivo-latin-wdth-normal.woff2?url';
+import displayFont from '@fontsource-variable/manrope/files/manrope-latin-wght-normal.woff2?url';
+import bodyFont from '@fontsource-variable/geist/files/geist-latin-wght-normal.woff2?url';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import Dock from '../components/Dock.astro';
@@ -44,8 +45,10 @@ const graph = {
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical || site} />
     {!indexable && <meta name="robots" content="noindex, follow" />}
-    <meta name="theme-color" content="#f6f3ed" />
-    <link rel="preload" href={fontUrl} as="font" type="font/woff2" crossorigin />
+    <meta name="theme-color" content="#ffffff" />
+    <link rel="preload" href={displayFont} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={bodyFont} as="font" type="font/woff2" crossorigin />
+    <script is:inline>if("IntersectionObserver"in window)document.documentElement.classList.add("js")</script>
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/logo.png" />
     <meta property="og:type" content="website" />
@@ -72,5 +75,15 @@ const graph = {
     </main>
     <Footer />
     <Dock waMessage={waMessage} />
+    <script>
+      // Fades content in as it scrolls into view. The .reveal state only applies while the .js class is set.
+      document.querySelectorAll('main section:not(.hero, .page-hero) .section-head, main .steps > li, main .rows > *, main .faq, main .gallery > *, main .ladder, main .facts, main .tag-list').forEach((el) => el.classList.add('reveal'));
+      const seen = new IntersectionObserver((entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) { e.target.classList.add('in'); seen.unobserve(e.target); }
+        });
+      }, { rootMargin: '0px 0px -8% 0px' });
+      document.querySelectorAll('.reveal').forEach((el) => seen.observe(el));
+    </script>
   </body>
 </html>
