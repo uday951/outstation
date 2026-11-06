@@ -29,8 +29,8 @@ const start = routesByKm.find((r) => r.slug === 'hyderabad-to-bangalore')!;
     const select = p.querySelector('select')!;
     select.addEventListener('change', () => {
       const o = select.selectedOptions[0];
-      p.querySelector('[data-km]')!.textContent = o.dataset.km!;
-      p.querySelector('[data-hours]')!.textContent = o.dataset.hours!;
+      p.querySelector('dd[data-km]')!.textContent = o.dataset.km!;
+      p.querySelector('dd[data-hours]')!.textContent = o.dataset.hours!;
       p.querySelector<HTMLAnchorElement>('a[data-href]')!.href = o.dataset.href!;
       p.querySelector<HTMLAnchorElement>('a[data-wa]')!.href = o.dataset.wa!;
     });
