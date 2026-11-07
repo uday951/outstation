@@ -11,13 +11,13 @@ export const legalPages: LegalPage[] = [
   {
     slug: 'privacy-policy',
     title: 'Privacy Policy',
-    metaTitle: 'Privacy Policy | Best Ambulance Service',
-    description: 'What information Best Ambulance Service collects through this website, phone and WhatsApp, why it is collected, who processes it and how to contact us.',
+    metaTitle: 'Privacy Policy | Outstation Ambulance',
+    description: 'What information Outstation Ambulance collects through this website, phone and WhatsApp, why it is collected, who processes it and how to contact us.',
     summary: 'What we collect, why, and who handles it.',
     reviewed: false,
     html: `
 <h2>Who we are</h2>
-<p>${business.name}, ${fullAddress}. Contact: ${contact}.</p>
+<p>${business.name}, operated by ${business.operator}, ${fullAddress}. Contact: ${contact}.</p>
 <h2>Information we collect</h2>
 <p>When you use a form on this website, we collect what you enter:</p>
 <ul>
@@ -45,8 +45,8 @@ export const legalPages: LegalPage[] = [
   {
     slug: 'terms',
     title: 'Terms and Conditions',
-    metaTitle: 'Terms and Conditions | Best Ambulance Service',
-    description: 'The terms that apply when you use this website or request an ambulance from Best Ambulance Service, including requests, availability and pricing.',
+    metaTitle: 'Terms and Conditions | Outstation Ambulance',
+    description: 'The terms that apply when you use this website or request an ambulance from Outstation Ambulance, including requests, availability and pricing.',
     summary: 'The terms for using this website and requesting a service.',
     reviewed: false,
     html: `
@@ -74,7 +74,7 @@ export const legalPages: LegalPage[] = [
   {
     slug: 'disclaimer',
     title: 'Disclaimer',
-    metaTitle: 'Disclaimer | Best Ambulance Service',
+    metaTitle: 'Disclaimer | Outstation Ambulance',
     description: 'What the content on this website is and is not for: general information only, not medical advice, and not a replacement for emergency services.',
     summary: 'What this website’s content is, and is not, meant for.',
     reviewed: false,
@@ -96,8 +96,8 @@ export const legalPages: LegalPage[] = [
   {
     slug: 'refund-policy',
     title: 'Refund Policy',
-    metaTitle: 'Refund Policy | Best Ambulance Service',
-    description: 'How refunds are handled when a planned ambulance booking is cancelled or cannot be fulfilled by Best Ambulance Service, and how to request one.',
+    metaTitle: 'Refund Policy | Outstation Ambulance',
+    description: 'How refunds are handled when a planned ambulance booking is cancelled or cannot be fulfilled by Outstation Ambulance, and how to request one.',
     summary: 'How refunds work if a booking is cancelled or cannot go ahead.',
     reviewed: false,
     html: `
@@ -118,8 +118,8 @@ export const legalPages: LegalPage[] = [
   {
     slug: 'cancellation-policy',
     title: 'Cancellation Policy',
-    metaTitle: 'Cancellation Policy | Best Ambulance Service',
-    description: 'How to cancel a planned ambulance, standby or outstation booking with Best Ambulance Service, and what applies depending on the timing of the cancellation.',
+    metaTitle: 'Cancellation Policy | Outstation Ambulance',
+    description: 'How to cancel a planned ambulance, standby or outstation booking with Outstation Ambulance, and what applies depending on the timing of the cancellation.',
     summary: 'How to cancel, and what applies depending on the timing.',
     reviewed: false,
     html: `
@@ -142,7 +142,7 @@ export const legalPages: LegalPage[] = [
   {
     slug: 'service-delivery-policy',
     title: 'Service Delivery Policy',
-    metaTitle: 'Service Delivery Policy | Best Ambulance Service',
+    metaTitle: 'Service Delivery Policy | Outstation Ambulance',
     description: 'What service delivery means for an ambulance business: how emergency dispatch and planned trips work, our coverage area, and what happens if we cannot reach you.',
     summary: 'How dispatch and planned trips reach you, and what happens if they cannot.',
     reviewed: false,

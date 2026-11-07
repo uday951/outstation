@@ -197,7 +197,7 @@ export const services: Service[] = [
     related: ['hospital-transfer', 'bls-ambulance', 'medical-escort', 'outstation-ambulance'],
     bookType: 'Basic (BLS) ambulance',
     photo: 'lineup',
-    photoAlt: 'A smaller ambulance and a larger Advanced Life Support ambulance outside the Best Ambulance Service office',
+    photoAlt: 'A smaller ambulance and a larger Advanced Life Support ambulance outside the Outstation Ambulance office',
   },
   {
     slug: 'hospital-transfer',

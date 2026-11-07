@@ -3,8 +3,10 @@
 // Source: bestambulance.in (crawled 4 Nov 2026); reuse authorized by the site owner.
 
 export const business = {
-  name: 'Best Ambulance Service',
-  shortName: 'Best Ambulance',
+  name: 'Outstation Ambulance',
+  shortName: 'Outstation Ambulance',
+  // The registered operator. GSTIN and PAN below belong to it, so it stays named beside them.
+  operator: 'Best Ambulance Service',
   phoneE164: '+918821084108',
   phoneDisplay: '+91 88210 84108',
   whatsappNumber: '918821084108',

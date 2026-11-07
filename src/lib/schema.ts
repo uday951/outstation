@@ -12,7 +12,7 @@ export function organization(site: string) {
     '@id': orgId(site),
     additionalType: 'https://en.wikipedia.org/wiki/Ambulance',
     name: business.name,
-    alternateName: business.shortName,
+    alternateName: business.operator,
     url: site,
     logo: `${site}/logo.png`,
     image: `${site}/og.jpg`,

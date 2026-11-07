@@ -1,7 +1,7 @@
 {
   "name": "outstationambulance",
   "version": "1.0.0",
-  "description": "Outstation ambulance website for Best Ambulance Service",
+  "description": "Outstation Ambulance website",
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
@@ -14,16 +14,31 @@
   "type": "module",
   "dependencies": {
     "@astrojs/node": "^11.1.9",
+    "@astrojs/react": "^7.0.1",
     "@astrojs/sitemap": "^3.7.4",
     "@fontsource-variable/geist": "^5.3.0",
     "@fontsource-variable/manrope": "^5.3.0",
+    "@tailwindcss/vite": "^4.3.5",
     "astro": "^7.4.5",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "cn": "^0.5.2",
+    "lucide-react": "^1.70.0",
     "lucide-static": "^1.70.0",
-    "sharp": "^0.35.5"
+    "motion": "^12.43.0",
+    "radix-ui": "^1.8.1",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "sharp": "^0.35.5",
+    "tailwind-merge": "^3.7.0",
+    "tailwindcss": "^4.3.5"
   },
   "private": true,
   "devDependencies": {
-    "node": "^22.23.4"
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "node": "^22.23.4",
+    "typescript": "^7.0.2"
   },
   "engines": {
     "node": ">=22.23.4 <23"

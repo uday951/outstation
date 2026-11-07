@@ -9,6 +9,8 @@ import Faq from '../components/Faq.astro';
 import Icon from '../components/Icon.astro';
 import Photo from '../components/Photo.astro';
 import FinalCta from '../components/FinalCta.astro';
+import CountUp from '../components/CountUp';
+import SpotlightCard from '../components/SpotlightCard';
 import { telHref, business } from '../data/business';
 import { routesByKm, routeHref, routes } from '../data/routes';
 import { services, serviceHref } from '../data/services';
@@ -34,7 +36,7 @@ const decide = [
   { q: 'A family member has passed away', a: 'Freezer box transport', href: '/services/dead-body-freezer-box', icon: 'snowflake' },
 ] as const;
 
-const featured = ['ventilator-ambulance', 'oxygen-ambulance', 'hospital-transfer', 'patient-transport', 'medical-escort', 'dead-body-freezer-box', 'emergency-ambulance'];
+const featured = ['ventilator-ambulance', 'oxygen-ambulance', 'hospital-transfer', 'patient-transport', 'medical-escort', 'dead-body-freezer-box', 'emergency-ambulance', 'cardiac-ambulance'];
 const featuredCards = featured.map((slug) => services.find((s) => s.slug === slug)!);
 const icu = services.find((s) => s.slug === 'icu-ambulance')!;
 
@@ -46,7 +48,7 @@ const steps = [
 ];
 ---
 <Base
-  title="Outstation Ambulance Service from Hyderabad | ICU & Oxygen Transfers"
+  title="Outstation Ambulance from Hyderabad | ICU & Oxygen Transfers"
   description="Long-distance ambulance transfers from Hyderabad to Bangalore, Chennai, Vijayawada and beyond. ICU, ventilator and oxygen ambulances, arranged by phone 24×7."
   waMessage={waMsg}
 >
@@ -67,7 +69,7 @@ const steps = [
         </ul>
       </div>
       <div class="planner">
-        <Photo name="street" class="planner-photo" eager sizes="(min-width: 1040px) 42vw, 100vw" alt="Three white Best Ambulance Service vehicles, including a large Force Traveller ambulance, parked on a Hyderabad street" />
+        <Photo name="street" class="planner-photo" eager sizes="(min-width: 1040px) 42vw, 100vw" alt="Three white ambulances, including a large Force Traveller ambulance, parked on a Hyderabad street" />
         <RoutePlanner />
       </div>
     </div>
@@ -76,9 +78,9 @@ const steps = [
   <section class="section--tight" aria-label="At a glance" style="padding-top:0">
     <div class="wrap stats">
       <div class="stat reveal"><strong>24×7</strong><span>Phone and WhatsApp dispatch</span></div>
-      <div class="stat reveal" style="--i:1"><strong class="num">{routes.length}</strong><span>Outstation routes mapped</span></div>
-      <div class="stat reveal" style="--i:2"><strong class="num">{allAreas.length}</strong><span>Hyderabad localities listed</span></div>
-      <div class="stat reveal" style="--i:3"><strong class="num">{services.length + 1}</strong><span>Ambulance services</span></div>
+      <div class="stat reveal" style="--i:1"><strong class="num"><CountUp client:visible to={routes.length} mode="roll" duration={1.6} /></strong><span>Outstation routes mapped</span></div>
+      <div class="stat reveal" style="--i:2"><strong class="num"><CountUp client:visible to={allAreas.length} mode="roll" duration={1.6} /></strong><span>Hyderabad localities listed</span></div>
+      <div class="stat reveal" style="--i:3"><strong class="num"><CountUp client:visible to={services.length + 1} mode="roll" duration={1.6} /></strong><span>Ambulance services</span></div>
     </div>
   </section>
 
@@ -115,12 +117,16 @@ const steps = [
           <span class="go">Learn more <Icon name="arrowUpRight" /></span>
         </a>
         {featuredCards.map((s, i) => (
-          <a class="card reveal" style={`--i:${(i % 3) + 1}`} href={serviceHref(s.slug)}>
-            <span class="tile"><Icon name={serviceIcons[s.slug]} /></span>
-            <h3>{s.name}</h3>
-            <p>{s.short}</p>
-            <span class="go">Learn more <Icon name="arrowUpRight" /></span>
-          </a>
+          <div class="spot-wrap reveal" style={`--i:${(i % 3) + 1}`}>
+            <SpotlightCard client:visible theme="light" className="spot !p-0" spotlightColor="#2152d9" intensity={0.5} spotlightSize={280} borderGlow={1} style={{ '--spotlight-card-surface': '#f5f6fa', '--spotlight-card-shadow': 'none' }}>
+              <a class="spot-link" href={serviceHref(s.slug)}>
+                <span class="tile"><Icon name={serviceIcons[s.slug]} /></span>
+                <h3>{s.name}</h3>
+                <p>{s.short}</p>
+                <span class="go">Learn more <Icon name="arrowUpRight" /></span>
+              </a>
+            </SpotlightCard>
+          </div>
         ))}
       </div>
       <p style="margin-top:var(--s-6)"><a class="btn btn--ghost" href="/services">See all ambulance services</a></p>
@@ -220,7 +226,7 @@ const steps = [
       <div class="fleet-strip reveal">
         <Photo name="pair" alt="A large Advanced Life Support ambulance beside a smaller ambulance under a shed" sizes="(min-width: 720px) 50vw, 100vw" />
         <Photo name="interiorDay" alt="Inside a smaller ambulance, with a padded stretcher, attendant seat and monitor" sizes="(min-width: 720px) 25vw, 100vw" />
-        <Photo name="lineup" alt="Two ambulances parked outside the Best Ambulance Service office" sizes="(min-width: 720px) 25vw, 100vw" />
+        <Photo name="lineup" alt="Two ambulances parked outside the office" sizes="(min-width: 720px) 25vw, 100vw" />
       </div>
       <p style="margin-top:var(--s-6)"><a class="btn btn--ghost" href="/fleet">See the full fleet</a></p>
     </div>

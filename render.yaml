@@ -2,7 +2,7 @@
 # not here. See "Deploy on Render" in README.md.
 services:
   - type: web
-    name: best-ambulance
+    name: outstation-ambulance
     runtime: node
     region: singapore # closest Render region to India; cannot be changed after creation
     plan: 0.5c-512mb # always on. The free plan sleeps after 15 minutes, which is unsafe for this site

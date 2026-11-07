@@ -1,6 +1,6 @@
-# Best Ambulance Service: outstation website
+# Outstation Ambulance website
 
-Static pages with one small server endpoint for enquiries. Built with Astro 7, plain CSS and almost no JavaScript.
+Built with Astro 7, React islands, Tailwind CSS 4, shadcn/ui and React Bits. Pages are static, with server endpoints for enquiries and payments.
 
 Full project report, including everything that still needs the business's input: [docs/PROJECT-REPORT.md](docs/PROJECT-REPORT.md)
 

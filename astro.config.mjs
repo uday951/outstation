@@ -2,6 +2,8 @@
 import { defineConfig } from 'astro/config';
 import node from '@astrojs/node';
 import sitemap from '@astrojs/sitemap';
+import react from '@astrojs/react';
+import tailwindcss from '@tailwindcss/vite';
 import { legacyRedirects } from './src/data/redirects.mjs';
 
 // On Render, a deploy uses its own onrender.com address (and stays noindex, see Base.astro)
@@ -17,7 +19,9 @@ export default defineConfig({
   build: { format: 'directory' },
   adapter: node({ mode: 'standalone' }),
   redirects: legacyRedirects,
+  vite: { plugins: [tailwindcss()] },
   integrations: [
+    react(),
     sitemap({
       filter: (page) => {
         const path = new URL(page).pathname.replace(/\/$/, '') || '/';

@@ -9,7 +9,7 @@ import { business, telHref, waHref, fullAddress } from '../data/business';
 const site = (Astro.site?.href ?? '').replace(/\/$/, '');
 const crumbs = [{ name: 'Home', href: '/' }, { name: 'Contact', href: '/contact' }];
 ---
-<Base title="Contact Best Ambulance Service | Phone, WhatsApp & LB Nagar Address" description="Call or WhatsApp +91 88210 84108, 24×7. Send a message or request a callback for planned transfers. Office at Chintalkunta Check Post, LB Nagar, Hyderabad." crumbs={crumbs} pageType="ContactPage">
+<Base title="Contact Outstation Ambulance | Phone, WhatsApp & LB Nagar Address" description="Call or WhatsApp +91 88210 84108, 24×7. Send a message or request a callback for planned transfers. Office at Chintalkunta Check Post, LB Nagar, Hyderabad." crumbs={crumbs} pageType="ContactPage">
   <Crumbs items={crumbs} />
   <section class="page-hero">
     <div class="wrap">
@@ -38,7 +38,7 @@ const crumbs = [{ name: 'Home', href: '/' }, { name: 'Contact', href: '/contact'
           <dt>Coverage</dt>
           <dd>Hyderabad, Secunderabad and surrounding areas. <a class="link" href="/services/outstation-ambulance">Outstation transfers</a> from Hyderabad.</dd>
           <dt>Registration</dt>
-          <dd>GSTIN {business.gstin}<br />PAN {business.pan}</dd>
+          <dd>Operated by {business.operator}<br />GSTIN {business.gstin}<br />PAN {business.pan}</dd>
         </dl>
       </div>
       <div>

@@ -12,6 +12,8 @@ Prepared 4 November 2026. Every test result below comes from a run against the f
 | 4 | **Confirm the vehicle branding** | Photos show "Lucky Ambulance" and other numbers (9347134108, 7288020108, 8686427425, 9398328703), not +91 88210 84108. Number plates are also visible. Confirm these are fine to publish. |
 | 5 | **Confirm route figures** | See the table in section 7. Nellore especially. |
 | 6 | **Legal and medical review** | See section 11. |
+| 7 | **Confirm the brand on the vehicles and email** | The site now says Outstation Ambulance, but the photos show "Lucky Ambulance" and the email address is care@bestambulance.in. |
+| 8 | **Confirm the domain still suits the new name** | The plan is to replace bestambulance.in, which now wouldn't match the brand name. |
 
 ## 1. Reference pages inspected
 
@@ -131,14 +133,16 @@ Skills used: `seo-local`, `seo-programmatic`, `seo-schema` guidance, and the `me
 ## 6. Architecture and stack
 
 - **Astro 7.4.5** with `@astrojs/node`: static pages, plus one server route, `POST /api/enquiry`
-- **Plain CSS** with design tokens, two self-hosted variable fonts, no UI or animation libraries
-- **JavaScript:** none on route pages except a small inline menu script; about 7 KB (3 KB gzipped) on form pages
+- **Tailwind CSS 4, shadcn/ui and React Bits** on React islands, with custom CSS tokens and two self-hosted variable fonts
+- **JavaScript:** small vanilla scripts on all pages; React loads only on the home page, when its islands scroll into view.
 - **Data-driven content** in `src/data/*`
 - **Node:** Astro 7 needs 22.23.4 or newer. This machine has 22.14, and it was not changed. Node is a project dev dependency instead, so `npm run` works. The host must supply its own Node 22.23.4+.
 - **Hosting:** Render web service from `render.yaml`, in Singapore, on the always-on `0.5c-512mb` plan. The free plan sleeps after 15 minutes and takes about a minute to wake, which is unsafe here. Only `bestambulance.in` is indexable; any other address gets noindex. Tested by reproducing Render's commands and variables on a clean Windows copy with Node 22.23.4. **Not yet run on Render or on Linux.**
 - **Why Astro 7:** Astro 5 was tried first for the installed Node, but `npm audit` showed serious issues, including a crash from a malformed Host header and an AVIF image RCE. `npm audit` now reports **0 vulnerabilities**.
 
-**Design system** (`src/styles/global.css`): redesigned on request to match the quality of bestambulance.in, replacing the first warm-neutral look. Deep navy `#0f1b3d`, blue `#2152d9`, with red `#d42a39` kept for calling; Manrope for display and Geist for reading (both self-hosted); large radii, soft shadows, frosted header, scroll reveals that respect reduced motion. Distinctive to this site: an interactive route map plotted from real coordinates, and a route planner in the hero. Code and copy are original; the look follows the business's own brand family. Icons are Lucide (ISC licence). The logo is still a placeholder mark, so replace it with the official one.
+**Design system** (`src/styles/global.css`): light, chosen by the client. Deep navy `#0f1b3d`, blue `#2152d9`, with red `#d42a39` kept for calling; Manrope for display and Geist for reading, both self-hosted; large radii, soft shadows, frosted header, soft card glow that follows the cursor, and scroll reveals that respect reduced motion. Distinctive to this site: an interactive route map plotted from real coordinates and a hero route planner. The logo is still a placeholder mark, so replace it with the official one.
+
+**Component libraries:** Tailwind CSS 4, shadcn/ui (Button) and React Bits (SpotlightCard, CountUp), the last two as React islands on the home page. React Bits is MIT with a Commons Clause: fine inside this website, but the components can't be resold on their own. Icons are Lucide (ISC).
 
 **Skills:** `ui-ux-pro-max` and `emil-design-eng` were used. No skill is named "EMLI"; `emil-design-eng` is assumed to be what you meant. `reverse-engineer-anything` (REA) is for binaries and packaged apps, so the site was inspected with a browser and an HTTP crawl instead, keeping its practice of separating what was observed from what is unknown.
 
@@ -148,7 +152,8 @@ Reuse authorised by you for Best Ambulance Service.
 
 | Detail | Value | Source |
 | --- | --- | --- |
-| Name | Best Ambulance Service | Site |
+| Brand | Outstation Ambulance | Requested by the client |
+| Operator | Best Ambulance Service | Site. Shown beside the GSTIN and PAN, which are registered to it. **Please confirm this wording.** |
 | Phone and WhatsApp | +91 88210 84108 | Site |
 | Email | care@bestambulance.in | Site, schema |
 | Address | 5-5-871, Chintalkunta Check Post Bus Stop, near NASA Hospitals, LB Nagar, Hyderabad 500074 | **Schema only**, not shown on their pages. Please confirm it should be public |
